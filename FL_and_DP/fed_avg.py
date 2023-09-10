@@ -65,10 +65,11 @@ def fed_avg(train_data,test_data,number_of_clients,learning_rate,momentum,numEpo
     plt.plot(epoch_list, acc_list)
     plt.ylabel('accuracy')
     plt.xlabel('epoch')
+    plt.savefig('../result/fedavg_result.png')
     plt.show()
-    record=[iters,numEpoch,test_loss_record,test_accuracy_record]
+    #record=[iters,numEpoch,test_loss_record,test_accuracy_record]
 
-    torch.save(record, "../record/{}.pth".format(int(numEpoch)))
+    #torch.save(record, "../record/{}.pth".format(int(numEpoch)))
 
 if __name__=="__main__":
     train_data, test_data = get_data('mnist', augment=False)
