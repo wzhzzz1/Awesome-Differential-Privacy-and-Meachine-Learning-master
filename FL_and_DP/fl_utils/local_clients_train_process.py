@@ -8,7 +8,7 @@ import os
 import torch
 from torch.utils.data import TensorDataset
 
-from util.sampling import get_data_loaders_uniform_without_replace
+from data.util.sampling import get_data_loaders_uniform_without_replace
 from optimizer.clipping_and_adding_noise import clipping_and_adding_noise
 from train_and_validation.train import train
 from train_and_validation.train_with_dp import train_dynamic_add_noise
