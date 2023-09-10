@@ -7,7 +7,7 @@ from fl_utils.local_clients_train_process import local_clients_train_process_wit
 from fl_utils.send_main_model_to_clients import send_main_model_to_clients
 from data.fed_data_distribution.dirichlet_nonIID_data import fed_dataset_NonIID_Dirichlet
 from fl_utils.optimizier_and_model_distribution import create_model_optimizer_criterion_dict
-from fed_data_distribution.pathological_nonIID_data import pathological_split_noniid
+from data.fed_data_distribution.pathological_nonIID_data import pathological_split_noniid
 from data.get_data import get_data
 from model.CNN import CNN, Cifar10CNN
 from train_and_validation.validation import validation
