@@ -81,10 +81,10 @@ if __name__=="__main__":
     batch_size=64    #小批量
     learning_rate = 0.01   #学习率
     numEpoch = 1       #客户端本地下降次数
-    number_of_clients=10   #客户端数量
+    number_of_clients=100   #客户端数量
     momentum=0.9      #动量
     iters=5      #联邦学习中的全局迭代次数
-    alpha=0.05 #狄立克雷的异质参数
+    alpha=5 #狄立克雷的异质参数
     seed=1   #随机种子
     q_for_batch_size=0.1  #基于该数据采样率组建每个客户端的batchsize
 
