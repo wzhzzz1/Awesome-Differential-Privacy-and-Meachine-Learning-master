@@ -2,7 +2,6 @@ import torch
 import os
 from torch import nn
 from torch.utils.data import TensorDataset
-import pylab
 import matplotlib.pyplot as plt
 # 配置训练环境和超参数
 # 配置GPU，这里有两种方式

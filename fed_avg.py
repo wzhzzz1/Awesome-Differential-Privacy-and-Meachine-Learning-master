@@ -1,10 +1,12 @@
-from FL_and_DP.fl_utils.center_average_model_with_weights import set_averaged_weights_as_main_model_weights, \
+import sys
+sys.path.append('/home/wangzihang/FL-DP/')
+from fl_utils.center_average_model_with_weights import set_averaged_weights_as_main_model_weights, \
     set_averaged_weights_as_main_model_weights_fully_averaged
-from FL_and_DP.fl_utils.local_clients_train_process import local_clients_train_process_without_dp_one_epoch, \
+from fl_utils.local_clients_train_process import local_clients_train_process_without_dp_one_epoch, \
     local_clients_train_process_without_dp_one_batch
-from FL_and_DP.fl_utils.send_main_model_to_clients import send_main_model_to_clients
+from fl_utils.send_main_model_to_clients import send_main_model_to_clients
 from data.fed_data_distribution.dirichlet_nonIID_data import fed_dataset_NonIID_Dirichlet
-from FL_and_DP.fl_utils.optimizier_and_model_distribution import create_model_optimizer_criterion_dict
+from fl_utils.optimizier_and_model_distribution import create_model_optimizer_criterion_dict
 from data.fed_data_distribution.pathological_nonIID_data import pathological_split_noniid
 from data.get_data import get_data
 from model.CNN import CNN, Cifar10CNN
@@ -59,14 +61,17 @@ def fed_avg(train_data,test_data,number_of_clients,learning_rate,momentum,numEpo
         epoch_list.append(i)
         acc_list.append(test_accuracy)
 
-
+    plt.figure(figsize=(24, 16))
     plt.plot(epoch_list, acc_list)
     plt.ylabel('accuracy')
     plt.xlabel('epoch')
-    plt.show()
-    record=[iters,numEpoch,test_loss_record,test_accuracy_record]
+    plt.xticks(range(0, 101, 10),rotation=45)
+    plt.yticks(range(0, 101, 5),rotation=45)
+    plt.savefig('../result/fedavg_result_'+'iters'+str(iters)+'_appha'+str(alpha)+'_clients'+str(number_of_clients)+'.png')
 
-    torch.save(record, "../record/{}.pth".format(int(numEpoch)))
+    #record=[iters,numEpoch,test_loss_record,test_accuracy_record]
+
+    #torch.save(record, "../record/{}.pth".format(int(numEpoch)))
 
 if __name__=="__main__":
     train_data, test_data = get_data('mnist', augment=False)
@@ -81,7 +86,7 @@ if __name__=="__main__":
     number_of_clients=10   #客户端数量
     momentum=0.9      #动量
     iters=100      #联邦学习中的全局迭代次数
-    alpha=0.05 #狄立克雷的异质参数
+    alpha=5 #狄立克雷的异质参数
     seed=1   #随机种子
     q_for_batch_size=0.1  #基于该数据采样率组建每个客户端的batchsize
 
