@@ -10,7 +10,7 @@ from FL_and_DP.fl_utils.optimizier_and_model_distribution import create_model_op
 from data.fed_data_distribution.pathological_nonIID_data import pathological_split_noniid
 from data.get_data import get_data
 from model.CNN import CNN, Cifar10CNN
-from model.modelUtil import mnist_fully_connected
+from model.modelUtil import mnist_fully_connected,mnist_fully_connected_IN
 from train_and_validation.validation import validation
 import torch
 import matplotlib.pyplot as plt
@@ -34,11 +34,13 @@ def parse_arguments():
                         help='随机种子')
     parser.add_argument('--sr', type=float, default=0.1,
                         help='采样率')
+    parser.add_argument('--personal', type=int, default=0,
+                        help='采样率')
     args = parser.parse_args()
     return args
 
 
-def fed_avg(train_data,test_data,number_of_clients,learning_rate,momentum,numEpoch,iters,alpha,seed,q,model):
+def fed_avg(train_data,test_data,number_of_clients,learning_rate,momentum,numEpoch,iters,alpha,seed,q,per):
     epoch_list = []
     acc_list = []
     #客户端的样本分配
@@ -50,7 +52,12 @@ def fed_avg(train_data,test_data,number_of_clients,learning_rate,momentum,numEpo
     center_model = mnist_fully_connected(10)
 
     # 各个客户端的model,optimizer,criterion的分配
-    clients_model_list, clients_optimizer_list, clients_criterion_list = create_model_optimizer_criterion_dict(number_of_clients, learning_rate,center_model)
+    if per == 1:
+        clients_model_list, clients_optimizer_list, clients_criterion_list = create_model_optimizer_criterion_dict(number_of_clients, learning_rate, mnist_fully_connected_IN(10))
+    else:
+        clients_model_list, clients_optimizer_list, clients_criterion_list = create_model_optimizer_criterion_dict(number_of_clients, learning_rate, center_model)
+
+
 
 
 
@@ -103,7 +110,6 @@ if __name__=="__main__":
     train_data, test_data = get_data(args.data, augment=False)
     #print(train_data.data)
 
-    model = CNN()   #创建神经网络对象
 
     #print(train_data.__dict__)
     batch_size=args.batchsize    #小批量
@@ -115,5 +121,5 @@ if __name__=="__main__":
     alpha=args.alpha #狄立克雷的异质参数
     seed=args.seed   #随机种子
     q_for_batch_size=args.sr  #基于该数据采样率组建每个客户端的batchsize
-
-    fed_avg(train_data,test_data,number_of_clients,learning_rate ,momentum,numEpoch,iters,alpha,seed,q_for_batch_size,model)
+    per = args.personal
+    fed_avg(train_data,test_data,number_of_clients,learning_rate ,momentum,numEpoch,iters,alpha,seed,q_for_batch_size,per)
