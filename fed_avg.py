@@ -10,7 +10,7 @@ from FL_and_DP.fl_utils.optimizier_and_model_distribution import create_model_op
 from data.fed_data_distribution.pathological_nonIID_data import pathological_split_noniid
 from data.get_data import get_data
 from model.CNN import CNN, Cifar10CNN
-from model.modelUtil.py import mnist_fully_connected
+from model.modelUtil import mnist_fully_connected
 from train_and_validation.validation import validation
 import torch
 import matplotlib.pyplot as plt
