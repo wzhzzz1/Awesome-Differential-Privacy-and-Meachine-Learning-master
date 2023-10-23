@@ -26,7 +26,6 @@ def validation(model, test_loader):
     test_loss /= num_examples
     test_acc = 100. * correct / num_examples
 
-    print(f'Test set: Average loss: {test_loss:.4f}, '
-          f'Accuracy: {correct}/{num_examples} ({test_acc:.2f}%)')
+
 
     return test_loss, test_acc

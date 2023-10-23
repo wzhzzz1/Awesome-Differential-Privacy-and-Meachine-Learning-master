@@ -83,17 +83,21 @@ def fed_avg(train_data,test_data,number_of_clients,learning_rate,momentum,numEpo
         # 3 客户端上传参数到中心方进行加权平均并更新中心方参数(根据客户端数量加权平均)
         main_model = set_averaged_weights_as_main_model_weights(center_model,clients_model_list,weight_of_each_clients)
 
-
+        print("Iteration", str(i + 1), ": ")
+        for i in range(len(clients_model_list)):
+            test_loss, test_accuracy = validation(clients_model_list[i], test_dl)
+            print(f'第{i}个客户端模型' f'Test set: Average loss: {test_loss:.4f}, 'f'Accuracy: ({test_acc:.2f}%)')
         # 查看效果中心方模型效果
         test_loss, test_accuracy = validation(main_model, test_dl)
-        print("Iteration", str(i + 1), ": main_model accuracy on all test data: {:7.4f}".format(test_accuracy))
-
+        print(f'服务器模型' f'Test set: Average loss: {test_loss:.4f}, 'f'Accuracy: ({test_acc:.2f}%)')
+        '''
         test_loss_record.append(test_loss)
         test_accuracy_record.append(test_accuracy)
 
         epoch_list.append(i)
         acc_list.append(test_accuracy)
-
+        '''
+    '''
     plt.figure(figsize=(24, 16))
     plt.plot(epoch_list, acc_list)
     plt.ylabel('accuracy')
@@ -101,7 +105,7 @@ def fed_avg(train_data,test_data,number_of_clients,learning_rate,momentum,numEpo
     plt.xticks(range(0, 101, 10),rotation=45)
     plt.yticks(range(0, 101, 5),rotation=45)
     plt.savefig('./result/fedavg_result_'+'iters'+str(iters)+'_appha'+str(alpha)+'_clients'+str(number_of_clients)+'.png')
-
+    '''
     #record=[iters,numEpoch,test_loss_record,test_accuracy_record]
 
     #torch.save(record, "../record/{}.pth".format(int(numEpoch)))
