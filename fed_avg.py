@@ -67,7 +67,7 @@ def fed_avg(train_data,test_data,number_of_clients,learning_rate,momentum,numEpo
     plt.xlabel('epoch')
     plt.xticks(range(0, 101, 10),rotation=45)
     plt.yticks(range(0, 101, 5),rotation=45)
-    plt.savefig('../result/fedavg_result_'+'iters'+str(iters)+'_appha'+str(alpha)+'_clients'+str(number_of_clients)+'.png')
+    plt.savefig('./result/fedavg_result_'+'iters'+str(iters)+'_appha'+str(alpha)+'_clients'+str(number_of_clients)+'.png')
 
     #record=[iters,numEpoch,test_loss_record,test_accuracy_record]
 
