@@ -11,7 +11,7 @@ def validation(model, test_loader):
     test_loss = 0
     correct = 0
     device='cpu'
-
+    model.to(device)
     with torch.no_grad():
         for id,(data, target) in enumerate(test_loader):
             # if id==0:
