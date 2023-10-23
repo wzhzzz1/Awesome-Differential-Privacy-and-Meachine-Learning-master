@@ -31,8 +31,6 @@ def local_clients_train_process_without_dp_one_epoch(number_of_clients,clients_d
         criterion = clients_criterion_list[i]
         optimizer = clients_optimizer_list[i]
 
-        if i < number_of_clients:
-            print("Client:", i)
 
         for epoch in range(numEpoch):  # 每个客户端本地进行训练
 
