@@ -83,18 +83,6 @@ def fed_avg(train_data,test_data,number_of_clients,learning_rate,momentum,numEpo
         # 3 客户端上传参数到中心方进行加权平均并更新中心方参数(根据客户端数量加权平均)
         main_model = set_averaged_weights_as_main_model_weights(center_model,clients_model_list,weight_of_each_clients)
 
-        for k0,v0 in clients_model_list[0].state_dict().items():
-            print(k0)
-            print(v0[0])
-        for k0,v0 in clients_model_list[1].state_dict().items():
-            print(k0)
-            print(v0[0])
-        for k0,v0 in clients_model_list[2].state_dict().items():
-            print(k0)
-            print(v0[0])
-        for k0,v0 in main_model.state_dict().items():
-            print(k0)
-            print(v0[0])
 
         # 查看效果中心方模型效果
         test_loss, test_accuracy = validation(main_model, test_dl)
