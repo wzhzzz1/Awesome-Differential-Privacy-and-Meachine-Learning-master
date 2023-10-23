@@ -73,20 +73,20 @@ def fed_avg(train_data,test_data,number_of_clients,learning_rate,momentum,numEpo
     for i in range(iters):
 
         print("现在进行和中心方的第{:3.0f}轮联邦训练".format(i+1))
-        print("1 中心方广播参数给各个客户端")
-        # 1 中心方广播参数给各个客户端
-        clients_model_list = send_main_model_to_clients(center_model, clients_model_list)
-        print("2 本地梯度下降")
-        # 2本地梯度下降
+
+
+
         local_clients_train_process_without_dp_one_epoch(number_of_clients,clients_data_list,clients_model_list,clients_criterion_list,clients_optimizer_list,numEpoch,q)
 
-        # 3 客户端上传参数到中心方进行加权平均并更新中心方参数(根据客户端数量加权平均)
+
         main_model = set_averaged_weights_as_main_model_weights(center_model,clients_model_list,weight_of_each_clients)
+
+        clients_model_list = send_main_model_to_clients(center_model, clients_model_list)
 
         print("Iteration", str(i + 1), ": ")
         for i in range(len(clients_model_list)):
             test_loss, test_accuracy = validation(clients_model_list[i], test_dl)
-            print(f'第{i}个客户端模型' f'Test set: Average loss: {test_loss:.4f}, 'f'Accuracy: ({test_accuracy:.2f}%)')
+            print(f'第{i+1}个客户端模型' f'Test set: Average loss: {test_loss:.4f}, 'f'Accuracy: ({test_accuracy:.2f}%)')
         # 查看效果中心方模型效果
         test_loss, test_accuracy = validation(main_model, test_dl)
         print(f'服务器模型' f'Test set: Average loss: {test_loss:.4f}, 'f'Accuracy: ({test_accuracy:.2f}%)')
