@@ -23,7 +23,6 @@ def parse_arguments():
     parser.add_argument('--batchsize', type=int, help='the number of class for this dataset', default=64)
     parser.add_argument('--epoch', type=int, default=1)
     parser.add_argument('--iters', type=int, default=100)
-    parser.add_argument('--epsilon', type=float, default=8)
 
 
     parser.add_argument('--lr', type=float, default=1e-2,
