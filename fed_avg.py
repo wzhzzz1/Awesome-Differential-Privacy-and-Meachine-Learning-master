@@ -85,14 +85,16 @@ def fed_avg(train_data,test_data,number_of_clients,learning_rate,momentum,numEpo
 
         for k0,v0 in clients_model_list[0].state_dict().items():
             print(k0)
-            print(v0)
+            print(v0[0][0])
         for k0,v0 in clients_model_list[1].state_dict().items():
             print(k0)
-            print(v0)
-
+            print(v0[0][0])
+        for k0,v0 in clients_model_list[2].state_dict().items():
+            print(k0)
+            print(v0[0][0])
         for k0,v0 in main_model.state_dict().items():
             print(k0)
-            print(v0)
+            print(v0[0][0])
 
         # 查看效果中心方模型效果
         test_loss, test_accuracy = validation(main_model, test_dl)
