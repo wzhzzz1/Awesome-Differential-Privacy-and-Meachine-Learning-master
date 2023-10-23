@@ -16,7 +16,8 @@ def set_averaged_weights_as_main_model_weights(center_model,clients_model_list,w
             if sum_parameters is None:  # 先初始化模型字典，主要是初始化key
                 sum_parameters = {}
                 for key, var in local_parameters.items():
-                    sum_parameters[key] = weight_of_each_clients[i] * var.clone()
+                    if 'norm' not in key and 'bn' not in key and 'downsample.1' not in key:
+                        sum_parameters[key] = weight_of_each_clients[i] * var.clone()
 
             else:  # 然后做值的累加,这边直接加权了
                 for var in sum_parameters:
