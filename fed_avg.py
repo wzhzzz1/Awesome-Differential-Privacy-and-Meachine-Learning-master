@@ -13,6 +13,31 @@ from model.CNN import CNN, Cifar10CNN
 from train_and_validation.validation import validation
 import torch
 import matplotlib.pyplot as plt
+import argparse
+
+def parse_arguments():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--data', type=str, default='mnist',
+                        choices=['mnist', 'cifar10', 'cifar100', 'fashionmnist', 'emnist', 'purchase', 'chmnist'])
+    parser.add_argument('--client', type=int, default=10)
+    parser.add_argument('--batchsize', type=int, help='the number of class for this dataset', default=64)
+    parser.add_argument('--epoch', type=int, default=1)
+    parser.add_argument('--iters', type=int, default=100)
+    parser.add_argument('--epsilon', type=float, default=8)
+
+
+    parser.add_argument('--lr', type=float, default=1e-2,
+                        help='learning rate')
+    parser.add_argument('--alpha', type=float, default=0.5,
+                        help='狄立克雷的异质参数')
+    parser.add_argument('--seed', type=int, default=1,
+                        help='随机种子')
+    parser.add_argument('--sr', type=float, default=0.1,
+                        help='采样率')
+    args = parser.parse_args()
+    return args
+
+
 def fed_avg(train_data,test_data,number_of_clients,learning_rate,momentum,numEpoch,iters,alpha,seed,q,model):
     epoch_list = []
     acc_list = []
@@ -74,20 +99,21 @@ def fed_avg(train_data,test_data,number_of_clients,learning_rate,momentum,numEpo
     #torch.save(record, "../record/{}.pth".format(int(numEpoch)))
 
 if __name__=="__main__":
-    train_data, test_data = get_data('mnist', augment=False)
+    args = parse_arguments()
+    train_data, test_data = get_data(args.data, augment=False)
     #print(train_data.data)
 
     model = CNN()   #创建神经网络对象
 
     #print(train_data.__dict__)
-    batch_size=64    #小批量
-    learning_rate = 0.01   #学习率
-    numEpoch = 1       #客户端本地下降次数
-    number_of_clients=10   #客户端数量
+    batch_size=args.batchsize    #小批量
+    learning_rate = args.lr   #学习率
+    numEpoch = args.epoch       #客户端本地下降次数
+    number_of_clients=args.client   #客户端数量
     momentum=0.9      #动量
-    iters=100      #联邦学习中的全局迭代次数
-    alpha=5 #狄立克雷的异质参数
-    seed=1   #随机种子
-    q_for_batch_size=0.1  #基于该数据采样率组建每个客户端的batchsize
+    iters=args.iters      #联邦学习中的全局迭代次数
+    alpha=args.alpha #狄立克雷的异质参数
+    seed=args.seed   #随机种子
+    q_for_batch_size=args.sr  #基于该数据采样率组建每个客户端的batchsize
 
     fed_avg(train_data,test_data,number_of_clients,learning_rate ,momentum,numEpoch,iters,alpha,seed,q_for_batch_size,model)
