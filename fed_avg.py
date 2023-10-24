@@ -98,7 +98,8 @@ def fed_avg(train_data,test_data,number_of_clients,learning_rate,momentum,numEpo
 
         # 查看效果中心方模型效果
         test_loss, test_accuracy = validation(main_model, test_dl)
-        print(f'服务器模型' f'Test set: Average loss: {test_loss:.4f}, 'f'Accuracy: ({test_accuracy:.2f}%)')
+        print(f'服务器模型:')
+        print(f'Test set: Average loss: {test_loss:.4f}, 'f'Accuracy: ({test_accuracy:.2f}%)')
 
         test_loss_record.append(test_loss)
         test_accuracy_record.append(test_accuracy)
