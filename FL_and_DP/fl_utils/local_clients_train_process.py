@@ -14,7 +14,7 @@ from data.util.sampling import get_data_loaders_uniform_without_replace
 from optimizer.clipping_and_adding_noise import PM_adding_noise
 from train_and_validation.train import train
 from train_and_validation.train_with_dp import train_dynamic_add_noise
-
+import time
 #无加噪的联邦学习，本地每个numEpoch做满一个epoch，即本地客户端的所有本地数据集
 def local_clients_train_process_without_dp_one_epoch(number_of_clients,clients_data_list,clients_model_list,clients_criterion_list,clients_optimizer_list,numEpoch,q):
 
@@ -166,5 +166,8 @@ def local_clients_train_process_one_epoch_with_ldp_PM(number_of_clients,clients_
             #     print("epoch: {:3.0f}".format(epoch + 1) + " | train_loss: {:7.5f}".format(
             #         train_loss) + " | train_accuracy: {:7.5f}".format(train_accuracy))
         print('第', i + 1, '个客户端正在对参数使用PM机制添加噪音')
+        start = time.time()
         model=PM_adding_noise(model, epsilon)
+        end = time.time()
+        print("耗时：",end-start)
         #print("model:",model.state_dict())

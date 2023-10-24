@@ -90,7 +90,7 @@ def fed_avg(train_data,test_data,number_of_clients,learning_rate,momentum,numEpo
         clients_model_list = send_main_model_to_clients(center_model, clients_model_list)
 
 
-        print("Iteration", str(i + 1), ": ")
+
         if per==1:
             for j in range(len(clients_model_list)):
                 p_test_loss, p_test_accuracy = validation(clients_model_list[j], test_dl)
