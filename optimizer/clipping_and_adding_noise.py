@@ -14,7 +14,9 @@ def PM_adding_noise(model,epsilon):
         for key in per_data_parameters_grad_dict:
 
             if 'norm' not in key and 'bn' not in key and 'downsample.1' not in key:  # 这个downsample是resnet里特有的，norm就是个性化层
+                print(type(per_data_parameters_grad_dict[key]))
                 print(per_data_parameters_grad_dict[key])
+
 
 
         #问题出现在这个model.load_state_dict,我们看一下具体是什么问题
