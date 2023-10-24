@@ -167,5 +167,5 @@ def local_clients_train_process_one_epoch_with_ldp_gaussian(number_of_clients,cl
             #     print("epoch: {:3.0f}".format(epoch + 1) + " | train_loss: {:7.5f}".format(
             #         train_loss) + " | train_accuracy: {:7.5f}".format(train_accuracy))
 
-        #model=clipping_and_adding_noise(model, max_norm, noise_scale)
+        model=clipping_and_adding_noise(model, max_norm, noise_scale)
         #print("model:",model.state_dict())

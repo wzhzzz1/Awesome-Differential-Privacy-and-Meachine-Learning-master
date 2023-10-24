@@ -16,6 +16,7 @@ import torch
 import matplotlib.pyplot as plt
 import argparse
 import pandas as pd
+import math
 def parse_arguments():
     parser = argparse.ArgumentParser()
     parser.add_argument('--data', type=str, default='mnist',
@@ -34,13 +35,21 @@ def parse_arguments():
                         help='随机种子')
     parser.add_argument('--sr', type=float, default=0.1,
                         help='采样率')
+    parser.add_argument('--eps', type=float, default=0,
+                        help='隐私预算')
+    parser.add_argument('--delta', type=float, default=0.01,
+                        help='')
+    parser.add_argument('--max_norm', type=float, default=0,
+                        help='最大范数')
     parser.add_argument('--personal', type=int, default=0,
                         help='采样率')
+    parser.add_argument('--usedp', type=int, default=0,
+                        help='是否用dp')
     args = parser.parse_args()
     return args
 
 
-def fed_avg(train_data,test_data,number_of_clients,learning_rate,momentum,numEpoch,iters,alpha,seed,q,per):
+def fed_avg(train_data,test_data,number_of_clients,learning_rate,momentum,numEpoch,iters,alpha,seed,q,max_norm,sigma,per,usedp):
     epoch_list = []
     acc_list = []
     #客户端的样本分配
@@ -74,8 +83,10 @@ def fed_avg(train_data,test_data,number_of_clients,learning_rate,momentum,numEpo
 
         print("现在进行和中心方的第{:3.0f}轮联邦训练".format(i+1))
 
-
-        local_clients_train_process_without_dp_one_epoch(number_of_clients,clients_data_list,clients_model_list,clients_criterion_list,clients_optimizer_list,numEpoch,q)
+        if usedp == 0:
+            local_clients_train_process_without_dp_one_epoch(number_of_clients, clients_data_list, clients_model_list,clients_criterion_list, clients_optimizer_list, numEpoch,q)
+        else:
+            local_clients_train_process_one_epoch_with_ldp_gaussian(number_of_clients, clients_data_list,clients_model_list, clients_criterion_list,clients_optimizer_list, numEpoch, q, max_norm,sigma)
 
 
         main_model = set_averaged_weights_as_main_model_weights(center_model,clients_model_list,weight_of_each_clients)
@@ -129,5 +140,10 @@ if __name__=="__main__":
     alpha=args.alpha #狄立克雷的异质参数
     seed=args.seed   #随机种子
     q_for_batch_size=args.sr  #基于该数据采样率组建每个客户端的batchsize
+    epsilon = args.eps
+    delta = args.delta
+    max_norm = args.max_norm
+    sigma = (math.sqrt(2 * math.log(1.25 / delta, math.e))) / epsilon
     per = args.personal
-    fed_avg(train_data,test_data,number_of_clients,learning_rate ,momentum,numEpoch,iters,alpha,seed,q_for_batch_size,per)
+    usedp = args.usedp
+    fed_avg(train_data,test_data,number_of_clients,learning_rate ,momentum,numEpoch,iters,alpha,seed,q_for_batch_size,max_norm,sigma,per,usedp)
