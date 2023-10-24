@@ -107,7 +107,7 @@ def fed_avg(train_data,test_data,number_of_clients,learning_rate,momentum,numEpo
         test_loss_record.append(test_loss)
         test_accuracy_record.append(test_accuracy)
 
-        epoch_list.append(i)
+        epoch_list.append(i+1)
         acc_list.append(test_accuracy)
 
     plt.figure(figsize=(24, 16))
