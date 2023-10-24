@@ -1,7 +1,8 @@
 import torch
+import math
+import random
 
-
-def PM_adding_noise(model,epsilon):
+def PM_adding_noise(model,epsilon): #这个地方可能最好调用以下ray来计算，不然感觉太慢了
 
     per_data_parameters_grad_dict={}
     params=model.state_dict()
@@ -14,11 +15,15 @@ def PM_adding_noise(model,epsilon):
         for key in per_data_parameters_grad_dict:
 
             if 'norm' not in key and 'bn' not in key and 'downsample.1' not in key:  # 这个downsample是resnet里特有的，norm就是个性化层
-                print(type(per_data_parameters_grad_dict[key]))
-                print(per_data_parameters_grad_dict[key])
+                max_value = torch.max(per_data_parameters_grad_dict[key])
+                min_value = torch.min(per_data_parameters_grad_dict[key])
+                bound = max(abs(max_value),abs(min_value))
+                per_data_parameters_grad_dict[key] = per_data_parameters_grad_dict[key]/bound
+                for i in range(per_data_parameters_grad_dict[key].size(0)):  # 遍历行
+                    for j in range(per_data_parameters_grad_dict[key].size(1)):  # 遍历列
 
-
-
+                        per_data_parameters_grad_dict[key][i][j] = PM(epsilon, per_data_parameters_grad_dict[key][i][j])
+                per_data_parameters_grad_dict[key] = per_data_parameters_grad_dict[key] * bound
         #问题出现在这个model.load_state_dict,我们看一下具体是什么问题
         model.load_state_dict(per_data_parameters_grad_dict, strict=True)
     return model
