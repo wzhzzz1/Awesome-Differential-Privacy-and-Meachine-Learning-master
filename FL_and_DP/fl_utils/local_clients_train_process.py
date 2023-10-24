@@ -11,7 +11,7 @@ import torch
 from torch.utils.data import TensorDataset
 
 from data.util.sampling import get_data_loaders_uniform_without_replace
-from optimizer.clipping_and_adding_noise import clipping_and_adding_noise
+from optimizer.clipping_and_adding_noise import PM_adding_noise
 from train_and_validation.train import train
 from train_and_validation.train_with_dp import train_dynamic_add_noise
 
@@ -138,11 +138,10 @@ def local_clients_train_process_with_dp_one_batch(number_of_clients,clients_data
                     train_loss) + " | train_accuracy: {:7.5f}".format(train_accuracy))
 
 #本地训练不进行裁剪加噪，最好上传到联邦中心方再进行裁剪加噪
-def local_clients_train_process_one_epoch_with_ldp_gaussian(number_of_clients,clients_data_list,clients_model_list,clients_criterion_list,clients_optimizer_list,numEpoch,q,max_norm,noise_scale):
+def local_clients_train_process_one_epoch_with_ldp_PM(number_of_clients,clients_data_list,clients_model_list,clients_criterion_list,clients_optimizer_list,numEpoch,q,epsilon):
 
     # 循环客户端
     for i in range(number_of_clients):
-        print("第",i,"个客服端进行训练")
         batch_size=math.floor(len(clients_data_list[i])*q)
         batch_size=64
         train_dl = torch.utils.data.DataLoader(
@@ -159,7 +158,6 @@ def local_clients_train_process_one_epoch_with_ldp_gaussian(number_of_clients,cl
 
         for epoch in range(numEpoch):  # 每个客户端本地进行训练
 
-            print("第",epoch,"轮")
             train_loss, train_accuracy = train(model, train_dl, optimizer)
             #test_loss, test_accuracy = validation(model, test_dl)  联邦下，这里本地没有合适的测试集了
 
@@ -167,5 +165,5 @@ def local_clients_train_process_one_epoch_with_ldp_gaussian(number_of_clients,cl
             #     print("epoch: {:3.0f}".format(epoch + 1) + " | train_loss: {:7.5f}".format(
             #         train_loss) + " | train_accuracy: {:7.5f}".format(train_accuracy))
 
-        model=clipping_and_adding_noise(model, max_norm, noise_scale)
+        model=PM_adding_noise(model, epsilon)
         #print("model:",model.state_dict())
