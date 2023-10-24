@@ -1,6 +1,7 @@
 import torch
 import math
 import random
+import numpy
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 def PM_adding_noise(model,epsilon): #这个地方可能最好调用以下ray来计算，不然感觉太慢了
 
@@ -15,15 +16,18 @@ def PM_adding_noise(model,epsilon): #这个地方可能最好调用以下ray来�
         for key in per_data_parameters_grad_dict:
 
             if 'norm' not in key and 'bn' not in key and 'downsample.1' not in key:  # 这个downsample是resnet里特有的，norm就是个性化层
+
                 max_value = torch.max(per_data_parameters_grad_dict[key])
                 min_value = torch.min(per_data_parameters_grad_dict[key])
                 bound = max(abs(max_value),abs(min_value))
                 per_data_parameters_grad_dict[key] = per_data_parameters_grad_dict[key]/bound
-                for i in range(per_data_parameters_grad_dict[key].size(0)):  # 遍历行
-                    for j in range(per_data_parameters_grad_dict[key].size(1)):  # 遍历列
+                temp = per_data_parameters_grad_dict[key].cpu().numpy()
+                num_rows, num_cols = temp.shape
+                for i in range(num_rows):  # 遍历行
+                    for j in range(num_cols):  # 遍历列
+                        temp[i][j] = PM(epsilon, temp[i][j])
+                per_data_parameters_grad_dict[key] = torch.tensor(temp).to('device') * bound
 
-                        per_data_parameters_grad_dict[key][i][j] = PM(epsilon, per_data_parameters_grad_dict[key][i][j])
-                per_data_parameters_grad_dict[key] = per_data_parameters_grad_dict[key] * bound
         #问题出现在这个model.load_state_dict,我们看一下具体是什么问题
         model.load_state_dict(per_data_parameters_grad_dict, strict=True)
     return model
