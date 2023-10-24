@@ -1,7 +1,7 @@
 import torch
 import math
 import random
-
+device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 def PM_adding_noise(model,epsilon): #这个地方可能最好调用以下ray来计算，不然感觉太慢了
 
     per_data_parameters_grad_dict={}

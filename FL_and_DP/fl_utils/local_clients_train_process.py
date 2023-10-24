@@ -142,6 +142,7 @@ def local_clients_train_process_one_epoch_with_ldp_PM(number_of_clients,clients_
 
     # 循环客户端
     for i in range(number_of_clients):
+        print('第',i+1,'个客户端正在训练')
         batch_size=math.floor(len(clients_data_list[i])*q)
         batch_size=64
         train_dl = torch.utils.data.DataLoader(
@@ -164,6 +165,6 @@ def local_clients_train_process_one_epoch_with_ldp_PM(number_of_clients,clients_
             # if i < number_of_clients:
             #     print("epoch: {:3.0f}".format(epoch + 1) + " | train_loss: {:7.5f}".format(
             #         train_loss) + " | train_accuracy: {:7.5f}".format(train_accuracy))
-
+        print('第', i + 1, '个客户端正在对参数使用PM机制添加噪音')
         model=PM_adding_noise(model, epsilon)
         #print("model:",model.state_dict())
