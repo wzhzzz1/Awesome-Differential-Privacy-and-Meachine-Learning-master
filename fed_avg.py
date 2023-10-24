@@ -15,7 +15,7 @@ from train_and_validation.validation import validation
 import torch
 import matplotlib.pyplot as plt
 import argparse
-
+import pandas as pd
 def parse_arguments():
     parser = argparse.ArgumentParser()
     parser.add_argument('--data', type=str, default='mnist',
@@ -85,9 +85,9 @@ def fed_avg(train_data,test_data,number_of_clients,learning_rate,momentum,numEpo
 
         print("Iteration", str(i + 1), ": ")
         if per==1:
-            for i in range(len(clients_model_list)):
-                p_test_loss, p_test_accuracy = validation(clients_model_list[i], test_dl)
-                print(f'第{i + 1}个客户端模型' f'Test set: Average loss: {p_test_loss:.4f}, 'f'Accuracy: ({p_test_accuracy:.2f}%)')
+            for j in range(len(clients_model_list)):
+                p_test_loss, p_test_accuracy = validation(clients_model_list[j], test_dl)
+                print(f'第{j + 1}个客户端模型' f'Test set: Average loss: {p_test_loss:.4f}, 'f'Accuracy: ({p_test_accuracy:.2f}%)')
 
         # 查看效果中心方模型效果
         test_loss, test_accuracy = validation(main_model, test_dl)
@@ -106,7 +106,9 @@ def fed_avg(train_data,test_data,number_of_clients,learning_rate,momentum,numEpo
     plt.xticks(range(0, 101, 10),rotation=45)
     plt.yticks(range(0, 101, 5),rotation=45)
     plt.savefig('./result/fedavg_result_'+'iters'+str(iters)+'_appha'+str(alpha)+'_clients'+str(number_of_clients)+'_lr'+str(learning_rate)+'_personal'+str(per)+'.png')
-
+    data = {'Epoch': epoch_list, 'Accuracy': acc_list}
+    df = pd.DataFrame(data)
+    df.to_csv('./result/fedavg_result_'+'iters'+str(iters)+'_appha'+str(alpha)+'_clients'+str(number_of_clients)+'_lr'+str(learning_rate)+'_personal'+str(per)+'.csv', index=False)
     #record=[iters,numEpoch,test_loss_record,test_accuracy_record]
 
     #torch.save(record, "../record/{}.pth".format(int(numEpoch)))
