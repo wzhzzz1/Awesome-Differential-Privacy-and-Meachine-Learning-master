@@ -97,7 +97,7 @@ class InputNorm1(nn.Module):
         self.num_channel = num_channel
         self.gamma = nn.Parameter(torch.ones(num_channel))
         self.beta = nn.Parameter(torch.zeros(num_channel, num_feature, num_feature))
-        self.conv = nn.Sequential(nn.Conv2d(1, 1, 3, 1, padding=2))
+        self.conv = nn.Sequential(nn.Conv2d(1, 1, 3, 1, padding=1))
 
     def forward(self, x):
         if self.num_channel == 1:
