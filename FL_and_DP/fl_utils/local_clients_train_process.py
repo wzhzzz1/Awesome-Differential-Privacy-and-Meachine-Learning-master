@@ -15,6 +15,7 @@ from optimizer.clipping_and_adding_noise import PM_adding_noise
 from train_and_validation.train import train
 from train_and_validation.train_with_dp import train_dynamic_add_noise
 import time
+import pandas as pd
 #无加噪的联邦学习，本地每个numEpoch做满一个epoch，即本地客户端的所有本地数据集
 def local_clients_train_process_without_dp_one_epoch(number_of_clients,clients_data_list,clients_model_list,clients_criterion_list,clients_optimizer_list,numEpoch,q):
 
@@ -167,9 +168,11 @@ def local_clients_train_process_one_epoch_with_ldp_PM(number_of_clients,clients_
             #         train_loss) + " | train_accuracy: {:7.5f}".format(train_accuracy))
         total_params_sum1 = 0
         params = model.state_dict()
+        per_data_parameters_grad_dict = {}
         for key, var in params.items():
+            per_data_parameters_grad_dict[key] = var.clone().detach()
             total_params_sum1 += var.sum().item()
-        print(total_params_sum1)
+        print('添加噪音前模型参数总和',total_params_sum1)
 
         print('第', i + 1, '个客户端正在对模型参数使用PM机制添加噪音')
         start = time.time()
@@ -181,6 +184,12 @@ def local_clients_train_process_one_epoch_with_ldp_PM(number_of_clients,clients_
         params = model.state_dict()
         for key, var in params.items():
             total_params_sum2 += var.sum().item()
-        print(total_params_sum2)
+        print('添加噪音后模型参数总和',total_params_sum2)
+        if abs(total_params_sum2-total_params_sum1)>100:
+            for key, tensor in per_data_parameters_grad_dict.items():
+                # 将每个张量的值转换为NumPy数组，然后保存到DataFrame中
+                df[key] = tensor.detach().cpu().numpy()
+            df.to_csv('./result/error' + '.csv', index=False)
+            return
         print('----------------------------------------------------------------------------------------')
         #print("model:",model.state_dict())
