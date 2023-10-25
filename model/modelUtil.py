@@ -94,7 +94,9 @@ class InputNorm1(nn.Module):
         self.beta = nn.Parameter(torch.zeros(num_channel, num_feature, num_feature))
     def forward(self, x):
         if self.num_channel == 1:
-            x = self.gamma*x*x*x
+            conv_kernel = torch.randn(self.num_channel, self.num_channel, 3, 3)
+            x = func.conv2d(x.unsqueeze(0), conv_kernel, padding=1)
+            x = self.gamma*x
             x = x + self.beta
             return  x
         if self.num_channel == 3:
