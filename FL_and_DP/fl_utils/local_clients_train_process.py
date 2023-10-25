@@ -186,6 +186,7 @@ def local_clients_train_process_one_epoch_with_ldp_PM(number_of_clients,clients_
             total_params_sum2 += var.sum().item()
         print('添加噪音后模型参数总和',total_params_sum2)
         if abs(total_params_sum2-total_params_sum1)>100:
+            df = pd.DataFrame()
             for key, tensor in per_data_parameters_grad_dict.items():
                 # 将每个张量的值转换为NumPy数组，然后保存到DataFrame中
                 df[key] = tensor.detach().cpu().numpy()
