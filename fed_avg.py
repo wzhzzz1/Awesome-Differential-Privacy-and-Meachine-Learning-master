@@ -63,9 +63,9 @@ def fed_avg(train_data,test_data,number_of_clients,learning_rate,momentum,numEpo
         clients_model_list, clients_optimizer_list, clients_criterion_list = create_model_optimizer_criterion_dict(number_of_clients, learning_rate, center_model)
 
     else:
-        if ptype=='ax+b':
+        if ptype=='liner':
             clients_model_list, clients_optimizer_list, clients_criterion_list = create_model_optimizer_criterion_dict(number_of_clients, learning_rate, mnist_fully_connected_IN(10))
-        if ptype=='x*x*x+b':
+        if ptype=='unliner':
             clients_model_list, clients_optimizer_list, clients_criterion_list = create_model_optimizer_criterion_dict(number_of_clients, learning_rate, mnist_fully_connected_IN1(10))
 
 
@@ -119,10 +119,10 @@ def fed_avg(train_data,test_data,number_of_clients,learning_rate,momentum,numEpo
     plt.xlabel('epoch')
     plt.xticks(range(0, 101, 10),rotation=45)
     plt.yticks(range(0, 101, 5),rotation=45)
-    plt.savefig('./result/fedavg_result_'+'iters'+str(iters)+'_appha'+str(alpha)+'_clients'+str(number_of_clients)+'_lr'+str(learning_rate)+'_personal'+str(per)+'_ptype'+str(ptype)+'_usedp'+str(usedp)+'_eps'+str(epsilon)+'.png')
+    plt.savefig('./result/fedavg_result_'+'iters'+str(iters)+'_appha'+str(alpha)+'_clients'+str(number_of_clients)+'_lr'+str(learning_rate)+'_personal'+str(per)+'_ptype_'+str(ptype)+'_usedp'+str(usedp)+'_eps'+str(epsilon)+'.png')
     data = {'Epoch': epoch_list, 'Accuracy': acc_list}
     df = pd.DataFrame(data)
-    df.to_csv('./result/fedavg_result_'+'iters'+str(iters)+'_appha'+str(alpha)+'_clients'+str(number_of_clients)+'_lr'+str(learning_rate)+'_personal'+str(per)+'_ptype'+str(ptype)+'_usedp'+str(usedp)+'_eps'+str(epsilon)+'.csv', index=False)
+    df.to_csv('./result/fedavg_result_'+'iters'+str(iters)+'_appha'+str(alpha)+'_clients'+str(number_of_clients)+'_lr'+str(learning_rate)+'_personal'+str(per)+'_ptype_'+str(ptype)+'_usedp'+str(usedp)+'_eps'+str(epsilon)+'.csv', index=False)
     #record=[iters,numEpoch,test_loss_record,test_accuracy_record]
 
     #torch.save(record, "../record/{}.pth".format(int(numEpoch)))
