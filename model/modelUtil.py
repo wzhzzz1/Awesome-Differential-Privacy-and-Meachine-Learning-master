@@ -67,17 +67,15 @@ class mnist_fully_connected(nn.Module):
 
 #卷积转换
 class InputNorm1(nn.Module):
-    def __init__(self):
-        super(InputNorm1, self).__init__()
-        self.conv=nn.Sequential(nn.Conv2d(1, 16, 8, 2, padding=2),
-                                      nn.ReLU(),
-                                      nn.MaxPool2d(2, 1),
-                                      nn.Conv2d(16, 32, 4, 2),
-                                      nn.ReLU(),
-                                      nn.MaxPool2d(2, 1),
-                                      nn.Flatten(),
-                                      nn.Linear(32 * 4 * 4, 28*28)
-                                )
-    def forward(self,x):
-        x=self.conv(x)
-        return x
+    def __init__(self, num_channel, num_feature):
+        super().__init__()
+        self.num_channel = num_channel
+        self.gamma = nn.Parameter(torch.ones(num_channel))
+        self.beta = nn.Parameter(torch.zeros(num_channel, num_feature, num_feature))
+    def forward(self, x):
+        if self.num_channel == 1:
+            x = self.gamma*x*x*x
+            x = x + self.beta
+            return  x
+        if self.num_channel == 3:
+            return torch.einsum('...ijk, i->...ijk', x, self.gamma) + self.beta
