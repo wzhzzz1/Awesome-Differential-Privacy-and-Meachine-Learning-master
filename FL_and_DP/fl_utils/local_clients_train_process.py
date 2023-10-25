@@ -189,7 +189,7 @@ def local_clients_train_process_one_epoch_with_ldp_PM(number_of_clients,clients_
             df = pd.DataFrame()
             for key, tensor in per_data_parameters_grad_dict.items():
                 # 将每个张量的值转换为NumPy数组，然后保存到DataFrame中
-                df[key] = tensor.detach().cpu().numpy()
+                df[key] = tensor.detach().cpu().numpy().flatten()
             df.to_csv('./result/error' + '.csv', index=False)
             return
         print('----------------------------------------------------------------------------------------')
