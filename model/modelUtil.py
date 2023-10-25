@@ -102,7 +102,7 @@ class InputNorm1(nn.Module):
         self.beta1 = nn.Parameter(torch.zeros(num_channel, num_feature, num_feature))
     def forward(self, x):
         if self.num_channel == 1:
-            temp = self.conv(x)*gamma1
+            temp = self.conv(x)*self.gamma1
 
             x = self.gamma * x
             x = x + self.beta
