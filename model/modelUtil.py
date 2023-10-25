@@ -98,21 +98,20 @@ class InputNorm1(nn.Module):
         self.gamma = nn.Parameter(torch.ones(num_channel))
         self.beta = nn.Parameter(torch.zeros(num_channel, num_feature, num_feature))
         self.conv = nn.Sequential(nn.Conv2d(1, 1, 3, 1, padding=1))
-        self.gamma1 = nn.Parameter(torch.ones(num_channel))
-        self.beta1 = nn.Parameter(torch.zeros(num_channel, num_feature, num_feature))
+
     def forward(self, x):
         if self.num_channel == 1:
-            temp = self.conv(x)*self.gamma1
+            temp = self.conv(x)*self.gamma
 
             x = self.gamma * x
             x = x + self.beta
-            x = x + temp+self.beta1
+            x = x + temp
             return x
         if self.num_channel == 3:
             return torch.einsum('...ijk, i->...ijk', x, self.gamma) + self.beta
 
 
-'''效果不稳定，好的时候比baseline好挺多的，坏的时候差不了多少(原理是在线性变换后再引入卷积变换，使的初始特征被表示的更全面了，但是毕竟卷积变换没搞成可学习的参数，备用吧)
+'''方案1：效果不稳定，好的时候比baseline好挺多的，坏的时候差不了多少(原理是在线性变换后再引入卷积变换，使的初始特征被表示的更全面了，但是毕竟卷积变换没搞成可学习的参数，备用吧)
 class InputNorm1(nn.Module):
     def __init__(self, num_channel, num_feature):
         super().__init__()
@@ -133,4 +132,26 @@ class InputNorm1(nn.Module):
             return torch.einsum('...ijk, i->...ijk', x, self.gamma) + self.beta
 
 
+'''
+
+'''方案2：效果稳定，比baseline好挺多的(原理是在线性变换后再引入卷积变换，使的初始特征被表示的更全面了)
+class InputNorm1(nn.Module):
+    def __init__(self, num_channel, num_feature):
+        super().__init__()
+        self.num_channel = num_channel
+        self.gamma = nn.Parameter(torch.ones(num_channel))
+        self.beta = nn.Parameter(torch.zeros(num_channel, num_feature, num_feature))
+        self.conv = nn.Sequential(nn.Conv2d(1, 1, 3, 1, padding=1))
+        self.gamma1 = nn.Parameter(torch.ones(num_channel))
+        self.beta1 = nn.Parameter(torch.zeros(num_channel, num_feature, num_feature))
+    def forward(self, x):
+        if self.num_channel == 1:
+            temp = self.conv(x)*self.gamma1
+
+            x = self.gamma * x
+            x = x + self.beta
+            x = x + temp+self.beta1
+            return x
+        if self.num_channel == 3:
+            return torch.einsum('...ijk, i->...ijk', x, self.gamma) + self.beta
 '''
