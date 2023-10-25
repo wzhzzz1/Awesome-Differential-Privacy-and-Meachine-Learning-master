@@ -165,9 +165,22 @@ def local_clients_train_process_one_epoch_with_ldp_PM(number_of_clients,clients_
             # if i < number_of_clients:
             #     print("epoch: {:3.0f}".format(epoch + 1) + " | train_loss: {:7.5f}".format(
             #         train_loss) + " | train_accuracy: {:7.5f}".format(train_accuracy))
+        total_params_sum1 = 0
+        params = model.state_dict()
+        for key, var in params.items():
+            total_params_sum1 += var.sum().item()
+        print(total_params_sum1)
+
         print('第', i + 1, '个客户端正在对模型参数使用PM机制添加噪音')
         start = time.time()
         model=PM_adding_noise(model, epsilon)
         end = time.time()
         print("添加噪音耗时：",end-start)
+
+        total_params_sum2 = 0
+        params = model.state_dict()
+        for key, var in params.items():
+            total_params_sum2 += var.sum().item()
+        print(total_params_sum2)
+        print('----------------------------------------------------------------------------------------')
         #print("model:",model.state_dict())
