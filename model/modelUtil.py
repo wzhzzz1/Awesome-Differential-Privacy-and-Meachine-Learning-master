@@ -12,6 +12,24 @@ from numpy import median
 import numpy as np
 import torch.nn.functional as func
 
+#baseline ,无个性化转换
+class mnist_fully_connected(nn.Module):
+    def __init__(self,num_classes):
+        super(mnist_fully_connected, self).__init__()
+        self.hidden1 = 600
+        self.hidden2 = 100
+        self.fc1 = nn.Linear(28 * 28, self.hidden1, bias=False)
+        self.fc2 = nn.Linear(self.hidden1, self.hidden2, bias=False)
+        self.fc3 = nn.Linear(self.hidden2, num_classes, bias=False)
+        self.relu = nn.ReLU(inplace=False)
+
+    def forward(self,x):
+        x = x.view(-1, 28 * 28)
+        x = relu(self.fc1(x))
+        x = relu(self.fc2(x))
+        x = self.fc3(x)
+        return x
+
 
 
 #线性转换，ax+b
@@ -38,7 +56,25 @@ class mnist_fully_connected_IN(nn.Module):
         self.fc2 = nn.Linear(self.hidden1, self.hidden2, bias=False)
         self.fc3 = nn.Linear(self.hidden2, num_classes, bias=False)
         self.relu = nn.ReLU(inplace=False)
-        #self.norm = InputNorm(1, 28)
+        self.norm = InputNorm(1, 28)
+    def forward(self,x):
+        x = self.norm(x)
+        x = x.view(-1, 28 * 28) #将输入变为28*28的一维向量
+        x = relu(self.fc1(x))
+        x = relu(self.fc2(x))
+        x = self.fc3(x)
+        return x
+
+#非线性转换，ax^3+b
+class mnist_fully_connected_IN1(nn.Module):
+    def __init__(self,num_classes):
+        super(mnist_fully_connected_IN1, self).__init__()
+        self.hidden1 = 600
+        self.hidden2 = 100
+        self.fc1 = nn.Linear(28 * 28, self.hidden1, bias=False)
+        self.fc2 = nn.Linear(self.hidden1, self.hidden2, bias=False)
+        self.fc3 = nn.Linear(self.hidden2, num_classes, bias=False)
+        self.relu = nn.ReLU(inplace=False)
         self.norm = InputNorm1(1, 28)
     def forward(self,x):
         x = self.norm(x)
@@ -48,22 +84,6 @@ class mnist_fully_connected_IN(nn.Module):
         x = self.fc3(x)
         return x
 
-class mnist_fully_connected(nn.Module):
-    def __init__(self,num_classes):
-        super(mnist_fully_connected, self).__init__()
-        self.hidden1 = 600
-        self.hidden2 = 100
-        self.fc1 = nn.Linear(28 * 28, self.hidden1, bias=False)
-        self.fc2 = nn.Linear(self.hidden1, self.hidden2, bias=False)
-        self.fc3 = nn.Linear(self.hidden2, num_classes, bias=False)
-        self.relu = nn.ReLU(inplace=False)
-
-    def forward(self,x):
-        x = x.view(-1, 28 * 28)
-        x = relu(self.fc1(x))
-        x = relu(self.fc2(x))
-        x = self.fc3(x)
-        return x
 
 #卷积转换
 class InputNorm1(nn.Module):

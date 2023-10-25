@@ -10,7 +10,7 @@ from FL_and_DP.fl_utils.optimizier_and_model_distribution import create_model_op
 from data.fed_data_distribution.pathological_nonIID_data import pathological_split_noniid
 from data.get_data import get_data
 from model.CNN import CNN, Cifar10CNN
-from model.modelUtil import mnist_fully_connected,mnist_fully_connected_IN
+from model.modelUtil import mnist_fully_connected,mnist_fully_connected_IN,mnist_fully_connected_IN1
 from train_and_validation.validation import validation
 import torch
 import matplotlib.pyplot as plt
@@ -59,10 +59,14 @@ def fed_avg(train_data,test_data,number_of_clients,learning_rate,momentum,numEpo
     center_model = mnist_fully_connected(10)
 
     # 各个客户端的model,optimizer,criterion的分配
-    if per == 1:
-        clients_model_list, clients_optimizer_list, clients_criterion_list = create_model_optimizer_criterion_dict(number_of_clients, learning_rate, mnist_fully_connected_IN(10))
-    else:
+    if per == 0:
         clients_model_list, clients_optimizer_list, clients_criterion_list = create_model_optimizer_criterion_dict(number_of_clients, learning_rate, center_model)
+
+    else:
+        if ptype=='ax+b':
+            clients_model_list, clients_optimizer_list, clients_criterion_list = create_model_optimizer_criterion_dict(number_of_clients, learning_rate, mnist_fully_connected_IN(10))
+        if ptype=='x*x*x+b':
+            clients_model_list, clients_optimizer_list, clients_criterion_list = create_model_optimizer_criterion_dict(number_of_clients, learning_rate, mnist_fully_connected_IN1(10))
 
 
 
@@ -118,7 +122,7 @@ def fed_avg(train_data,test_data,number_of_clients,learning_rate,momentum,numEpo
     plt.savefig('./result/fedavg_result_'+'iters'+str(iters)+'_appha'+str(alpha)+'_clients'+str(number_of_clients)+'_lr'+str(learning_rate)+'_personal'+str(per)+'_ptype'+str(ptype)+'_usedp'+str(usedp)+'_eps'+str(epsilon)+'.png')
     data = {'Epoch': epoch_list, 'Accuracy': acc_list}
     df = pd.DataFrame(data)
-    df.to_csv('./result/fedavg_result_'+'iters'+str(iters)+'_appha'+str(alpha)+'_clients'+str(number_of_clients)+'_lr'+str(learning_rate)+'_personal'+str(per)+'_usedp'+str(usedp)+'_eps'+str(epsilon)+'.csv', index=False)
+    df.to_csv('./result/fedavg_result_'+'iters'+str(iters)+'_appha'+str(alpha)+'_clients'+str(number_of_clients)+'_lr'+str(learning_rate)+'_personal'+str(per)+'_ptype'+str(ptype)+'_usedp'+str(usedp)+'_eps'+str(epsilon)+'.csv', index=False)
     #record=[iters,numEpoch,test_loss_record,test_accuracy_record]
 
     #torch.save(record, "../record/{}.pth".format(int(numEpoch)))
