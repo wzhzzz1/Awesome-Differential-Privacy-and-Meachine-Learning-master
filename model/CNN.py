@@ -32,6 +32,10 @@ class CNN(nn.Module):
         x=self.conv(x)
         return x
 
+
+
+
+
 #基于文章《Tempered Sigmoid Activations for Deep Learning with Differential Privacy》将激活函数改为Tanh
 class CNN_tanh(nn.Module):
     def __init__(self):
@@ -106,6 +110,9 @@ class Cifar10CNN(nn.Module):
     def forward(self,x):
         x=self.conv(x)
         return x
+
+
+
 
 
 #根据《Tempered Sigmoid Activations for Deep Learning with Differential Privacy》写的CNN，用于CIFAR10数据集，激活函数改为tanh

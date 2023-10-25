@@ -14,7 +14,7 @@ import torch.nn.functional as func
 
 
 
-
+#线性转换，ax+b
 class InputNorm(nn.Module):
     def __init__(self, num_channel, num_feature):
         super().__init__()
@@ -38,8 +38,8 @@ class mnist_fully_connected_IN(nn.Module):
         self.fc2 = nn.Linear(self.hidden1, self.hidden2, bias=False)
         self.fc3 = nn.Linear(self.hidden2, num_classes, bias=False)
         self.relu = nn.ReLU(inplace=False)
-        self.norm = InputNorm(1, 28)
-
+        #self.norm = InputNorm(1, 28)
+        self.norm = InputNorm1()
     def forward(self,x):
         x = self.norm(x)
         x = x.view(-1, 28 * 28) #将输入变为28*28的一维向量
@@ -63,4 +63,21 @@ class mnist_fully_connected(nn.Module):
         x = relu(self.fc1(x))
         x = relu(self.fc2(x))
         x = self.fc3(x)
+        return x
+
+#卷积转换
+class InputNorm1(nn.Module):
+    def __init__(self):
+        super(InputNorm1, self).__init__()
+        self.conv=nn.Sequential(nn.Conv2d(1, 16, 8, 2, padding=2),
+                                      nn.ReLU(),
+                                      nn.MaxPool2d(2, 1),
+                                      nn.Conv2d(16, 32, 4, 2),
+                                      nn.ReLU(),
+                                      nn.MaxPool2d(2, 1),
+                                      nn.Flatten(),
+                                      nn.Linear(32 * 4 * 4, 28*28)
+                                )
+    def forward(self,x):
+        x=self.conv(x)
         return x
