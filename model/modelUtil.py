@@ -39,7 +39,7 @@ class mnist_fully_connected_IN(nn.Module):
         self.fc3 = nn.Linear(self.hidden2, num_classes, bias=False)
         self.relu = nn.ReLU(inplace=False)
         #self.norm = InputNorm(1, 28)
-        self.norm = InputNorm1()
+        self.norm = InputNorm1(1, 28)
     def forward(self,x):
         x = self.norm(x)
         x = x.view(-1, 28 * 28) #将输入变为28*28的一维向量

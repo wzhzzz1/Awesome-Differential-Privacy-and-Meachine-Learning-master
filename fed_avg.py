@@ -38,14 +38,16 @@ def parse_arguments():
     parser.add_argument('--eps', type=float, default=0,
                         help='隐私预算')
     parser.add_argument('--personal', type=int, default=0,
-                        help='采样率')
+                        help='是否用个性化转换')
+    parser.add_argument('--ptype', type=str, default='no',
+                        help='是否用个性化转换')
     parser.add_argument('--usedp', type=int, default=0,
                         help='是否用dp')
     args = parser.parse_args()
     return args
 
 
-def fed_avg(train_data,test_data,number_of_clients,learning_rate,momentum,numEpoch,iters,alpha,seed,q,per,usedp,epsilon):
+def fed_avg(train_data,test_data,number_of_clients,learning_rate,momentum,numEpoch,iters,alpha,seed,q,per,ptype,usedp,epsilon):
     epoch_list = []
     acc_list = []
     #客户端的样本分配
@@ -113,7 +115,7 @@ def fed_avg(train_data,test_data,number_of_clients,learning_rate,momentum,numEpo
     plt.xlabel('epoch')
     plt.xticks(range(0, 101, 10),rotation=45)
     plt.yticks(range(0, 101, 5),rotation=45)
-    plt.savefig('./result/fedavg_result_'+'iters'+str(iters)+'_appha'+str(alpha)+'_clients'+str(number_of_clients)+'_lr'+str(learning_rate)+'_personal'+str(per)+'_usedp'+str(usedp)+'_eps'+str(epsilon)+'.png')
+    plt.savefig('./result/fedavg_result_'+'iters'+str(iters)+'_appha'+str(alpha)+'_clients'+str(number_of_clients)+'_lr'+str(learning_rate)+'_personal'+str(per)+'_ptype'+str(ptype)+'_usedp'+str(usedp)+'_eps'+str(epsilon)+'.png')
     data = {'Epoch': epoch_list, 'Accuracy': acc_list}
     df = pd.DataFrame(data)
     df.to_csv('./result/fedavg_result_'+'iters'+str(iters)+'_appha'+str(alpha)+'_clients'+str(number_of_clients)+'_lr'+str(learning_rate)+'_personal'+str(per)+'_usedp'+str(usedp)+'_eps'+str(epsilon)+'.csv', index=False)
@@ -140,5 +142,6 @@ if __name__=="__main__":
     epsilon = args.eps
 
     per = args.personal
+    ptype = args.ptype
     usedp = args.usedp
-    fed_avg(train_data,test_data,number_of_clients,learning_rate ,momentum,numEpoch,iters,alpha,seed,q_for_batch_size,per,usedp,epsilon)
+    fed_avg(train_data,test_data,number_of_clients,learning_rate ,momentum,numEpoch,iters,alpha,seed,q_for_batch_size,per,ptype,usedp,epsilon)
