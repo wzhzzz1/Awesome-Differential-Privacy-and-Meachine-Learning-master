@@ -178,6 +178,8 @@ def local_clients_train_process_one_epoch_with_ldp_PM(number_of_clients, clients
         print('第', i + 1, '个客户端正在对模型参数使用PM机制添加噪音')
         start = time.time()
         '''
+
+
         model = PM_adding_noise(model, epsilon)
         '''
         end = time.time()
