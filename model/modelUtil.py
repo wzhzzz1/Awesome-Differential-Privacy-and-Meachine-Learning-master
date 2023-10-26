@@ -97,7 +97,7 @@ class InputNorm1(nn.Module):
         self.num_channel = num_channel
         self.gamma = nn.Parameter(torch.ones(num_channel))
         self.beta = nn.Parameter(torch.zeros(num_channel, num_feature, num_feature))
-        self.gamma1 = nn.Parameter(torch.ones(num_channel))
+        self.gamma1 = nn.Parameter(torch.zeros(num_channel))
 
 
     def forward(self, x):
