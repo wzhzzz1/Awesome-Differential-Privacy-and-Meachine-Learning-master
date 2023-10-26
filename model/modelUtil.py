@@ -96,11 +96,12 @@ class InputNorm1(nn.Module):
         super().__init__()
         self.num_channel = num_channel
         self.gamma = nn.Parameter(torch.ones(num_channel))
+        self.eps = nn.Parameter(torch.ones(num_channel))
         self.beta = nn.Parameter(torch.zeros(num_channel, num_feature, num_feature))
 
     def forward(self, x):
         if self.num_channel == 1:
-            x = self.gamma * torch.log(1+x)
+            x = self.gamma * x ** self.eps
             x = x + self.beta
 
             return x
@@ -173,3 +174,5 @@ class InputNorm1(nn.Module):
             return torch.einsum('...ijk, i->...ijk', x, self.gamma) + self.beta
 
 '''
+
+#x = self.gamma * torch.log(1+x)
