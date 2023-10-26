@@ -97,17 +97,18 @@ class InputNorm1(nn.Module):
         self.num_channel = num_channel
         self.gamma = nn.Parameter(torch.ones(num_channel))
         self.beta = nn.Parameter(torch.zeros(num_channel, num_feature, num_feature))
+        self.conv = nn.Sequential(nn.Conv2d(1, 1, 3, 1, padding=1))
+
     def forward(self, x):
         if self.num_channel == 1:
-            max_value = torch.max(x)
-            min_value = torch.min(x)
-            x = (x-min_value)/(max_value-min_value)
+            temp = self.conv(x)*self.gamma
+
             x = self.gamma * x
             x = x + self.beta
+            x = x + temp
             return x
         if self.num_channel == 3:
             return torch.einsum('...ijk, i->...ijk', x, self.gamma) + self.beta
-
 
 '''方案1：效果不稳定，好的时候比baseline好一点，坏的时候差一点(原理是在线性变换前引入卷积变换，使的初始特征被表示的更全面了，但是毕竟定义的conv不可学习，或许多引入几个卷积层效果更好)
 class InputNorm1(nn.Module):
