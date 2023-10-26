@@ -103,7 +103,7 @@ class InputNorm1(nn.Module):
     def forward(self, x):
         if self.num_channel == 1:
 
-            x = self.gamma * x+self.gamma1*torch.sigmoid(x)
+            x = self.gamma * x+self.gamma1*torch.tanh(x)
             x = x + self.beta
 
             return x
