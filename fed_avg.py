@@ -99,13 +99,13 @@ def fed_avg(train_data, test_data, number_of_clients, learning_rate, momentum, n
                                                                 weight_of_each_clients)
 
         clients_model_list = send_main_model_to_clients(center_model, clients_model_list)
-        '''
+
         if per == 1:
             for j in range(len(clients_model_list)):
                 p_test_loss, p_test_accuracy = validation(clients_model_list[j], test_dl)
                 print(
                     f'第{j + 1}个客户端模型' f'Test set: Average loss: {p_test_loss:.4f}, 'f'Accuracy: ({p_test_accuracy:.2f}%)')
-        '''
+
         # 查看效果中心方模型效果
         test_loss, test_accuracy = validation(main_model, test_dl)
         print(f'服务器模型:')
