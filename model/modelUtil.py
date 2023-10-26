@@ -95,25 +95,14 @@ class InputNorm1(nn.Module):
     def __init__(self, num_channel, num_feature):
         super().__init__()
         self.num_channel = num_channel
-        self.gamma1 = nn.Parameter(torch.ones(num_channel))
-        self.gamma2 = nn.Parameter(torch.ones(num_channel))
-        self.beta = nn.Parameter(torch.zeros(num_channel, num_feature, num_feature))
-        self.conv1 = nn.Conv2d(1, 16, 8, 2, padding=2)
-        self.maxpool = nn.MaxPool2d(2, 1)
-        self.conv2 = nn.Conv2d(16, 32, 4, 2)
-        self.line1 = nn.Linear(32 * 4 * 4, 28*28)
-        self.fal = nn.Flatten()
+        self.gamma = nn.Parameter(torch.ones(num_channel))
+
+
     def forward(self, x):
         if self.num_channel == 1:
-            x = self.conv1(x)
-            x = relu(x)
-            x = self.maxpool(x)*self.gamma1
-            x = self.conv2(x)
-            x = relu(x)
-            x = self.maxpool(x)*self.gamma2
-            x = self.fal(x)
-            x = self.line1(x)
+            x = self.gamma * torch.log(1+x)
             x = x + self.beta
+
             return x
         if self.num_channel == 3:
             return torch.einsum('...ijk, i->...ijk', x, self.gamma) + self.beta
