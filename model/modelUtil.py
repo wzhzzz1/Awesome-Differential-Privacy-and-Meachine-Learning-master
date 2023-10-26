@@ -107,7 +107,6 @@ class InputNorm1(nn.Module):
             x = self.gamma * x
             x = self.conv(x)*self.gamma1
             x = x + self.beta
-            x = x + temp
             return x
         if self.num_channel == 3:
             return torch.einsum('...ijk, i->...ijk', x, self.gamma) + self.beta
