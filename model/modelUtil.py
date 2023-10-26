@@ -102,9 +102,10 @@ class InputNorm1(nn.Module):
 
     def forward(self, x):
         if self.num_channel == 1:
-            temp = self.conv(x)*self.gamma1
+
 
             x = self.gamma * x
+            x = self.conv(x)*self.gamma1
             x = x + self.beta
             x = x + temp
             return x
