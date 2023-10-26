@@ -164,20 +164,25 @@ def local_clients_train_process_one_epoch_with_ldp_PM(number_of_clients, clients
             # if i < number_of_clients:
             #     print("epoch: {:3.0f}".format(epoch + 1) + " | train_loss: {:7.5f}".format(
             #         train_loss) + " | train_accuracy: {:7.5f}".format(train_accuracy))
-        total_params_sum1 = 0
+        '''
         params = model.state_dict()
         per_data_parameters_grad_dict = {}
+        
+        total_params_sum1 = 0
         for key, var in params.items():
             per_data_parameters_grad_dict[key] = var.clone().detach()
             total_params_sum1 += var.sum().item()
         print('添加噪音前模型参数总和', total_params_sum1)
-
+        '''
+        '''
         print('第', i + 1, '个客户端正在对模型参数使用PM机制添加噪音')
         start = time.time()
+        '''
         model = PM_adding_noise(model, epsilon)
+        '''
         end = time.time()
         print("添加噪音耗时：", end - start)
-
+        
         total_params_sum2 = 0
         params = model.state_dict()
         for key, var in params.items():
@@ -190,6 +195,7 @@ def local_clients_train_process_one_epoch_with_ldp_PM(number_of_clients, clients
                 # 将每个张量的值转换为NumPy数组，然后保存到DataFrame中
                 df[key] = tensor.detach().cpu().numpy().flatten()
                 df.to_csv('./result/error_' + key + '.csv', index=False)
-            return
+            
         print('----------------------------------------------------------------------------------------')
         # print("model:",model.state_dict())
+        '''

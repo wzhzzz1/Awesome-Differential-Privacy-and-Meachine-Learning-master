@@ -46,8 +46,8 @@ def PM(eps, num):
         lt = (c + 1) / 2 * num - (c - 1) / 2
         rt = lt + c - 1
         if random.random()<(lt+c)/(c+1):  # 随机选择一个范围
-            perturbed_num = random.uniform(-c, lt-0.00000001)
+            perturbed_num = random.uniform(-c, lt)
         else:
-            perturbed_num = random.uniform(rt+0.000000001, c)
+            perturbed_num = random.uniform(rt, c)
 
     return perturbed_num
