@@ -97,13 +97,12 @@ class InputNorm1(nn.Module):
         self.num_channel = num_channel
         self.gamma = nn.Parameter(torch.ones(num_channel))
         self.beta = nn.Parameter(torch.zeros(num_channel, num_feature, num_feature))
-        self.gamma1=nn.Parameter(torch.ones(num_channel))
+
 
     def forward(self, x):
         if self.num_channel == 1:
 
-
-            x = self.gamma * x+self.gamma1*x*x*x
+            x = self.gamma * abs(x)
             x = x + self.beta
 
             return x
