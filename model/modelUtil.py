@@ -104,7 +104,6 @@ class InputNorm1(nn.Module):
         if self.num_channel == 1:
             temp = self.conv(x)*self.gamma1*self.plr
             self.plr = 1*self.plr
-            print(self.plr)
             x = self.gamma * x
             x = x + temp
             x = x + self.beta
