@@ -102,7 +102,7 @@ class InputNorm1(nn.Module):
         self.plr = torch.ones(num_channel)
     def forward(self, x):
         if self.num_channel == 1:
-            temp = self.conv(x)*self.gamma1*plr
+            temp = self.conv(x)*self.gamma1*self.plr
             self.plr = 1/2
             x = self.gamma * x
             x = x + temp
