@@ -105,8 +105,8 @@ class InputNorm1(nn.Module):
     def forward(self, x):
         if self.num_channel == 1:
             x = x.view(-1, 28 * 28)
-            x = relu(self.fc1(x))
-            x = relu(self.fc2(x))
+            x = self.fc1(x)
+            x = self.fc2(x)
             x = self.fc3(x)
             return x
         if self.num_channel == 3:
