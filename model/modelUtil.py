@@ -99,14 +99,14 @@ class InputNorm1(nn.Module):
         self.beta = nn.Parameter(torch.zeros(num_channel, num_feature, num_feature))
         self.conv = nn.Sequential(nn.Conv2d(1, 1, 3, 1, padding=1))
         self.gamma1 = nn.Parameter(torch.zeros(num_channel))
-        self.beta1 = nn.Parameter(torch.zeros(num_channel, num_feature, num_feature))
+
     def forward(self, x):
         if self.num_channel == 1:
             temp = self.conv(x)*self.gamma1
 
             x = self.gamma * x
             x = x + self.beta
-            x = x + temp+self.beta1
+            x = x + temp
             return x
         if self.num_channel == 3:
             return torch.einsum('...ijk, i->...ijk', x, self.gamma) + self.beta
