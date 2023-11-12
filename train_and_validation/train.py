@@ -33,7 +33,7 @@ def train(model, train_loader, optimizer):
         optimizer.step()  # 参数优化更新
         train_loss += loss.item()
 
-    avg_loss = train_loss / num_examples
+    avg_loss = train_loss / total_batches
     return avg_loss,train_acc
 '''
     model.eval()
