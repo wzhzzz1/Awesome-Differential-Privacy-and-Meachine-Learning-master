@@ -62,6 +62,7 @@ def fed_avg(train_data, test_data, number_of_clients, learning_rate, momentum, n
     center_model = mnist_fully_connected(10)
     all_train_loss=[]
     # 各个客户端的model,optimizer,criterion的分配
+
     if per == 0:
         clients_model_list, clients_optimizer_list, clients_criterion_list = create_model_optimizer_criterion_dict(
             number_of_clients, learning_rate, center_model)
