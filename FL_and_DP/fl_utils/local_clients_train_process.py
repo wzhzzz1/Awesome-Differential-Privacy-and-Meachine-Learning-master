@@ -19,6 +19,7 @@ import pandas as pd
 # 无加噪的联邦学习，本地每个numEpoch做满一个epoch，即本地客户端的所有本地数据集
 def local_clients_train_process_without_dp_one_epoch(number_of_clients, clients_data_list, clients_model_list,
                                                      clients_criterion_list, clients_optimizer_list, numEpoch, q):
+    all_train_loss=[] #为了输出训练集的损失，可以删除
     # 循环客户端
     for i in range(number_of_clients):
 
@@ -37,10 +38,11 @@ def local_clients_train_process_without_dp_one_epoch(number_of_clients, clients_
             train_loss, train_accuracy = train(model, train_dl, optimizer)
             # test_loss, test_accuracy = validation(model, test_dl)  联邦下，这里本地没有合适的测试集了
             print('第',i+1,'客户端的本地损失为:',train_loss)
+            all_train_loss.append(train_loss)
             # if i < number_of_clients:
             #     print("epoch: {:3.0f}".format(epoch + 1) + " | train_loss: {:7.5f}".format(
             #         train_loss) + " | train_accuracy: {:7.5f}".format(train_accuracy))
-
+    return all_train_loss
 
 # 无加噪的联邦学习，本地每个numEpoch做一个batch，即本地客户端的部分数据
 def local_clients_train_process_without_dp_one_batch(number_of_clients, clients_data_list, clients_model_list,

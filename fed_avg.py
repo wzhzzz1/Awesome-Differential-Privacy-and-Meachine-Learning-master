@@ -1,5 +1,4 @@
 import sys
-
 sys.path.append('/home/wangzihang/FL-DP/')
 from FL_and_DP.fl_utils.center_average_model_with_weights import set_averaged_weights_as_main_model_weights, \
     set_averaged_weights_as_main_model_weights_fully_averaged
@@ -61,7 +60,7 @@ def fed_avg(train_data, test_data, number_of_clients, learning_rate, momentum, n
 
     # 初始化中心模型,本质上是用来接收客户端的模型并加权平均进行更新的一个变量
     center_model = mnist_fully_connected(10)
-
+    all_train_loss=[]
     # 各个客户端的model,optimizer,criterion的分配
     if per == 0:
         clients_model_list, clients_optimizer_list, clients_criterion_list = create_model_optimizer_criterion_dict(
@@ -87,9 +86,10 @@ def fed_avg(train_data, test_data, number_of_clients, learning_rate, momentum, n
         print("现在进行和中心方的第{:3.0f}轮联邦训练".format(i + 1))
 
         if usedp == 0:
-            local_clients_train_process_without_dp_one_epoch(number_of_clients, clients_data_list, clients_model_list,
+            train_loss = local_clients_train_process_without_dp_one_epoch(number_of_clients, clients_data_list, clients_model_list,
                                                              clients_criterion_list, clients_optimizer_list, numEpoch,
                                                              q)
+            all_train_loss.append(train_loss)
         else:
             local_clients_train_process_one_epoch_with_ldp_PM(number_of_clients, clients_data_list, clients_model_list,
                                                               clients_criterion_list, clients_optimizer_list, numEpoch,
@@ -139,6 +139,7 @@ def fed_avg(train_data, test_data, number_of_clients, learning_rate, momentum, n
     df.to_csv('./result/fedavg_result_' + 'iters' + str(iters) + '_appha' + str(alpha) + '_clients' + str(
         number_of_clients) + '_lr' + str(learning_rate) + '_personal' + str(per) + '_ptype_' + str(
         ptype) + '_usedp' + str(usedp) + '_eps' + str(epsilon) + '.csv', index=False)
+    print(all_train_loss)
     # record=[iters,numEpoch,test_loss_record,test_accuracy_record]
 
     # torch.save(record, "../record/{}.pth".format(int(numEpoch)))
