@@ -37,7 +37,7 @@ def local_clients_train_process_without_dp_one_epoch(number_of_clients, clients_
 
             train_loss, train_accuracy = train(model, train_dl, optimizer)
             # test_loss, test_accuracy = validation(model, test_dl)  联邦下，这里本地没有合适的测试集了
-            print('第',i+1,'客户端的本地损失为:',train_loss)
+
             all_train_loss.append(train_loss)
             # if i < number_of_clients:
             #     print("epoch: {:3.0f}".format(epoch + 1) + " | train_loss: {:7.5f}".format(
