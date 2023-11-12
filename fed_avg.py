@@ -97,6 +97,7 @@ def fed_avg(train_data, test_data, number_of_clients, learning_rate, momentum, n
             all_train_loss.append(train_loss)
         main_model = set_averaged_weights_as_main_model_weights(center_model, clients_model_list,
                                                                 weight_of_each_clients)
+        '''
         if i==iters-1:
             with torch.no_grad():
                 for i in range(len(clients_model_list)):
@@ -105,7 +106,7 @@ def fed_avg(train_data, test_data, number_of_clients, learning_rate, momentum, n
                             print(i)
                             print(key)
                             print(value)
-
+        '''
         clients_model_list = send_main_model_to_clients(center_model, clients_model_list)
         '''
         if per == 1:
