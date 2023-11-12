@@ -1,5 +1,5 @@
 import torch
-
+device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
 def set_averaged_weights_as_main_model_weights(center_model,clients_model_list,weight_of_each_clients):
     sum_parameters = None  # 用来接所有边缘节点的模型的参数
@@ -21,7 +21,7 @@ def set_averaged_weights_as_main_model_weights(center_model,clients_model_list,w
 
             else:  # 然后做值的累加,这边直接加权了
                 for var in sum_parameters:
-                    sum_parameters[var] = sum_parameters[var] + weight_of_each_clients[i] * local_parameters[var]
+                    sum_parameters[var] = sum_parameters[var] + weight_of_each_clients[i] * local_parameters[var].to(device)
 
         for var in global_parameters:
             global_parameters[var] = (sum_parameters[var])
