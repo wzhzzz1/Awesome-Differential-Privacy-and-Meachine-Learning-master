@@ -20,7 +20,7 @@ def train(model, train_loader, optimizer):
     train_loss = 0.0
     train_acc= 0.0
     i=0
-    num_examples = 0
+    total_batches = len(train_loader)
 
     for id, (data, target) in enumerate(train_loader):
         # if id==0:
@@ -32,7 +32,6 @@ def train(model, train_loader, optimizer):
         loss.backward()  # 梯度求导
         optimizer.step()  # 参数优化更新
         train_loss += loss.item()
-        num_examples += data.size(0)  # 记录样本数
 
     avg_loss = train_loss / num_examples
     return avg_loss,train_acc
