@@ -91,10 +91,10 @@ def fed_avg(train_data, test_data, number_of_clients, learning_rate, momentum, n
                                                              q)
             all_train_loss.append(train_loss)
         else:
-            local_clients_train_process_one_epoch_with_ldp_PM(number_of_clients, clients_data_list, clients_model_list,
+            train_loss = local_clients_train_process_one_epoch_with_ldp_PM(number_of_clients, clients_data_list, clients_model_list,
                                                               clients_criterion_list, clients_optimizer_list, numEpoch,
                                                               q, epsilon)
-
+            all_train_loss.append(train_loss)
         main_model = set_averaged_weights_as_main_model_weights(center_model, clients_model_list,
                                                                 weight_of_each_clients)
         if i==iters-1:
