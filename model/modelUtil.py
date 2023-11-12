@@ -80,6 +80,8 @@ class mnist_fully_connected_IN1(nn.Module):
         self.fc3 = nn.Linear(self.hidden2, num_classes, bias=False)
         self.relu = nn.ReLU(inplace=False)
         self.norm = InputNorm1(1, 28)
+        self.bn = InputNorm2(1, 10)
+
 
     def forward(self, x):
         x = self.norm(x)
@@ -87,6 +89,7 @@ class mnist_fully_connected_IN1(nn.Module):
         x = relu(self.fc1(x))
         x = relu(self.fc2(x))
         x = self.fc3(x)
+        x = self.bn(x)
         return x
 
 
@@ -96,23 +99,31 @@ class InputNorm1(nn.Module):
         super().__init__()
         self.num_channel = num_channel
         self.gamma = nn.Parameter(torch.ones(num_channel))
-        self.beta = nn.Parameter(torch.zeros(num_channel, num_feature, num_feature))
-        self.conv = nn.Sequential(nn.Conv2d(1, 1, 3, 1, padding=1))
-        self.gamma1 = nn.Parameter(torch.ones(num_channel))
-        self.plr = torch.ones(num_channel,device=device)
+        self.beta = nn.Parameter(torch.zeros(num_channel, num_feature,num_feature))
     def forward(self, x):
         if self.num_channel == 1:
-            temp = self.conv(x)*self.gamma1*self.plr
-            self.plr = 1*self.plr
             x = self.gamma * x
-            x = x + temp
             x = x + self.beta
-
             return x
         if self.num_channel == 3:
             return torch.einsum('...ijk, i->...ijk', x, self.gamma) + self.beta
 
 
+
+class InputNorm2(nn.Module):
+    def __init__(self, num_channel, num_feature):
+        super().__init__()
+        self.num_channel = num_channel
+        self.gamma = nn.Parameter(torch.ones(num_channel))
+        self.beta = nn.Parameter(torch.zeros(num_channel, num_feature))
+
+    def forward(self, x):
+        if self.num_channel == 1:
+            x = self.gamma * x
+            x = x + self.beta
+            return x
+        if self.num_channel == 3:
+            return torch.einsum('...ijk, i->...ijk', x, self.gamma) + self.beta
 
 #x = self.gamma * torch.log(1+x)
 '''
@@ -199,4 +210,27 @@ class InputNorm1(nn.Module):
             return x
         if self.num_channel == 3:
             return torch.einsum('...ijk, i->...ijk', x, self.gamma) + self.beta
+            
+            
+
+
+class InputNorm1(nn.Module):
+    def __init__(self, num_channel, num_feature):
+        super().__init__()
+        self.num_channel = num_channel
+        self.gamma = nn.Parameter(torch.ones(num_channel))
+        self.beta = nn.Parameter(torch.zeros(num_channel, num_feature, num_feature))
+        self.conv = nn.Sequential(nn.Conv2d(1, 1, 3, 1, padding=1))
+        self.plr = torch.ones(num_channel,device=device)
+    def forward(self, x):
+        if self.num_channel == 1:
+            temp = self.conv(x)*self.plr
+            self.plr = 0.9*self.plr
+            x = self.gamma * x
+            x = x + temp
+            x = x + self.beta
+            return x
+        if self.num_channel == 3:
+            return torch.einsum('...ijk, i->...ijk', x, self.gamma) + self.beta
 '''
+
