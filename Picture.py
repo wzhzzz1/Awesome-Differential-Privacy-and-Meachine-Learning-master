@@ -1,74 +1,106 @@
 '''
 import matplotlib.pyplot as plt
-import numpy as np
 
-fig = plt.figure()
-ax = fig.add_subplot(111, projection='3d')
+# 第一部分数据
+x1 = [4, 6, 8, 10]
+y1 = [0.054, 0.028, 0.0165, 0.0162]
 
-x = np.arange(1, 11)  # 从1到10
-y = np.arange(1, 11)  # 从1到10
-z = np.zeros(10)
+# 第二部分数据
+x2 = [4, 6, 8, 10]
+y2 = [ 0.0155, 0.0155, 0.0155, 0.0155]
 
-dx = np.ones(10)
-dy = np.ones(10)
-dz = np.arange(1, 11)  # 从1到10，作为柱子的高度
+# 绘制曲线图
+plt.figure(figsize=(8, 5))  # 可选：设置图形大小
+plt.plot(x1, y1, label='LDP')
+plt.plot(x2, y2, label='noise-free')
 
-ax.bar3d(x, y, z, dx, dy, dz, color='skyblue')
-
-ax.set_xlabel('client')
-ax.set_ylabel('label')
-ax.set_zlabel('numbers')
-
-# 设置X和Y轴的刻度
-ax.set_xticks(x)
-ax.set_yticks(y)
-
+plt.xlabel('epsilon')
+plt.ylabel('Heterogeneity(sum of loss)')
+plt.suptitle('(a)IID', x=0.5, y=0.08, ha='center', fontsize=14)
+plt.legend()  # 添加图例
+plt.grid(True)  # 添加网格线
+plt.subplots_adjust(bottom=0.2)
 plt.show()
-'''
-
 '''
 import matplotlib.pyplot as plt
-from mpl_toolkits.mplot3d import Axes3D
-import numpy as np
 
-data = [
-    [691, 675, 541, 568, 591, 549, 666, 518, 595, 590],
-    [554, 628, 620, 615, 634, 606, 562, 709, 589, 526],
-    [560, 614, 595, 597, 601, 522, 537, 556, 576, 560],
-    [528, 769, 555, 634, 471, 508, 639, 684, 554, 533],
-    [700, 751, 609, 611, 596, 524, 641, 554, 559, 619],
-    [546, 641, 569, 563, 627, 545, 542, 663, 585, 580],
-    [680, 668, 613, 649, 569, 518, 616, 680, 605, 729],
-    [477, 724, 645, 673, 570, 612, 525, 589, 675, 484],
-    [659, 641, 625, 717, 594, 485, 617, 680, 571, 752],
-    [528, 631, 586, 504, 589, 552, 573, 632, 542, 576]
-]
+# 第一批数据
+x1_part1 = [4, 6, 8, 10]
+y1_part1 = [0.044, 0.028, 0.0195, 0.0162]
 
-fig = plt.figure(dpi=400)
-ax = fig.add_subplot(111, projection='3d')
+x1_part2 = [4, 6, 8, 10]
+y1_part2 = [0.0155, 0.0155, 0.0155, 0.0155]
 
-x_data, y_data = np.meshgrid(np.arange(1, 11), np.arange(1, 11))
-x = x_data.flatten()
-y = y_data.flatten()
-z = np.zeros_like(x)
+# 第二批数据
+x2_part1 = [4, 6, 8, 10]
+y2_part1 = [0.294, 0.177, 0.148, 0.126]
 
-dx = dy = 0.24  # 调整柱子宽度
-dz = np.array(data).flatten()
+x2_part2 = [4, 6, 8, 10]
+y2_part2 = [0.12, 0.12, 0.12, 0.12]
 
-# 定义颜色映射
-colors = plt.cm.get_cmap('tab10')  # 使用tab10颜色映射，其中每个标签对应不同颜色
+fig, axs = plt.subplots(nrows=1, ncols=2, figsize=(10, 5))
 
-# 为每个柱子分配对应的颜色
-colors_array = colors(y - 1)
+# 第一个子图
+axs[0].plot(x1_part1, y1_part1, marker='s', label='LDP',color='#B22222', markersize=8,linestyle='--',linewidth=2)
+axs[0].plot(x1_part2, y1_part2, marker='*', label='Noise-Free',color='black', markersize=8,linewidth=2)
 
-ax.bar3d(x, y, z, dx, dy, dz, color=colors_array)
+axs[0].legend()
+axs[0].grid(True,linestyle='--')
+axs[0].set_xlabel('epsilon')
+axs[0].set_ylabel('Heterogeneity(sum of loss)')
 
-ax.set_xlabel('Client')
-ax.set_ylabel('Label')
-ax.set_zlabel('Number')
-ax.set_xticks(x)
-ax.set_yticks(y)
+
+# 第二个子图
+axs[1].plot(x2_part1, y2_part1, marker='s', label='LDP',color='#B22222', markersize=8,linestyle='--',linewidth=2)
+axs[1].plot(x2_part2, y2_part2, marker='*', label='Noise-Free',color='black', markersize=8,linewidth=2)
+axs[1].set_xlabel('epsilon')
+axs[1].set_ylabel('Heterogeneity(sum of loss)')
+
+axs[1].legend()
+axs[1].grid(True,linestyle='--')
+# 调整布局
+plt.tight_layout()
+
+plt.sca(axs[0])
+plt.xticks(x1_part1 + x1_part2)
+
+plt.sca(axs[1])
+plt.xticks(x2_part1 + x2_part2)
+# 显示图形
+fig.text(0.289, 0.009, '(a)IID', ha='center')
+fig.text(0.782, 0.009, '(b)NO-IID', ha='center')
+plt.subplots_adjust(bottom=0.13)
 plt.show()
+fig.savefig('my_plot.png', dpi=300)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 '''
 import matplotlib.pyplot as plt
 import numpy as np
@@ -143,7 +175,6 @@ itle_text = ax2.text2D(0.5, -0.1, '(b) NO-IID', transform=ax2.transAxes, ha='cen
 plt.tight_layout()
 plt.subplots_adjust(wspace=0.2, right=0.93,top=1.25)
 plt.show()
-plt.show()
-
+'''
 
 
