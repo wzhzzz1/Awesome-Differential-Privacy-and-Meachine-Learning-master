@@ -122,7 +122,7 @@ def fed_avg(train_data, test_data, number_of_clients, learning_rate, momentum, n
                 for j in range(len(clients_model_list)):
                     if j ==9:
                         print('local model')
-                        for key, value in clients_model_list[i].state_dict().items():
+                        for key, value in clients_model_list[j].state_dict().items():
                             if 'norm'  in key or 'bn' in key or 'downsample.1' in key:  # 这个downsample是resnet里特有的，norm就是个性化层
                                 print(j)
                                 print(key)
@@ -133,7 +133,7 @@ def fed_avg(train_data, test_data, number_of_clients, learning_rate, momentum, n
                 for j in range(len(clients_model_list)):
                     if j ==9:
                         print('local model')
-                        for key, value in clients_model_list[i].state_dict().items():
+                        for key, value in clients_model_list[j].state_dict().items():
                             if 'norm'  in key or 'bn' in key or 'downsample.1' in key:  # 这个downsample是resnet里特有的，norm就是个性化层
                                 print(j)
                                 print(key)
