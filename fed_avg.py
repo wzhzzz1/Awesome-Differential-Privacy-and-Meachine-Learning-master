@@ -117,6 +117,7 @@ def fed_avg(train_data, test_data, number_of_clients, learning_rate, momentum, n
 
         clients_model_list = send_main_model_to_clients(center_model, clients_model_list)
         if i==iters-1:
+            print('fuhe')
             with torch.no_grad():
                 for i in range(len(clients_model_list)):
                     if i ==9:
