@@ -96,6 +96,17 @@ def fed_avg(train_data, test_data, number_of_clients, learning_rate, momentum, n
                                                               clients_criterion_list, clients_optimizer_list, numEpoch,
                                                               q, epsilon)
             all_train_loss.append(train_loss)
+        if i==iters-1:
+            print('111')
+            with torch.no_grad():
+                for j in range(len(clients_model_list)):
+                    if j ==9:
+                        print('local model')
+                        for key, value in clients_model_list[j].state_dict().items():
+                            if 'norm'  in key or 'bn' in key or 'downsample.1' in key:  # 这个downsample是resnet里特有的，norm就是个性化层
+                                print(j)
+                                print(key)
+                                print(value)
         main_model = set_averaged_weights_as_main_model_weights(center_model, clients_model_list,
                                                                 weight_of_each_clients)
 
@@ -115,7 +126,7 @@ def fed_avg(train_data, test_data, number_of_clients, learning_rate, momentum, n
                     print(key)
                     print(value)
 
-        #clients_model_list = send_main_model_to_clients(center_model, clients_model_list)
+        clients_model_list = send_main_model_to_clients(center_model, clients_model_list)
         if i==iters-1:
             print('fuhe')
             with torch.no_grad():
@@ -127,17 +138,7 @@ def fed_avg(train_data, test_data, number_of_clients, learning_rate, momentum, n
                                 print(j)
                                 print(key)
                                 print(value)
-        if i==iters-1:
-            print('fuhe')
-            with torch.no_grad():
-                for j in range(len(clients_model_list)):
-                    if j ==9:
-                        print('local model')
-                        for key, value in clients_model_list[j].state_dict().items():
-                            if 'norm'  in key or 'bn' in key or 'downsample.1' in key:  # 这个downsample是resnet里特有的，norm就是个性化层
-                                print(j)
-                                print(key)
-                                print(value)
+
         '''
         if per == 1:
             for j in range(len(clients_model_list)):
