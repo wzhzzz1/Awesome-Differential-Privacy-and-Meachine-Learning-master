@@ -99,7 +99,7 @@ def fed_avg(train_data, test_data, number_of_clients, learning_rate, momentum, n
 
         main_model = set_averaged_weights_as_main_model_weights(center_model, clients_model_list,
                                                                 weight_of_each_clients)
-
+        '''
         if i==iters-1:
             print('train finish')
             with torch.no_grad():
@@ -115,8 +115,9 @@ def fed_avg(train_data, test_data, number_of_clients, learning_rate, momentum, n
                     # if 'norm'  in key or 'bn' in key or 'downsample.1' in key:  # 这个downsample是resnet里特有的，norm就是个性化层
                     print(key)
                     print(value)
-
+        '''
         clients_model_list = send_main_model_to_clients(center_model, clients_model_list)
+        '''
         if i==iters-1:
             print('fuhe')
             with torch.no_grad():
@@ -128,7 +129,7 @@ def fed_avg(train_data, test_data, number_of_clients, learning_rate, momentum, n
                             print(j)
                             print(key)
                             print(value)
-
+        '''
         '''
         if per == 1:
             for j in range(len(clients_model_list)):
