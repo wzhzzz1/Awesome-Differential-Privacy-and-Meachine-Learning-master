@@ -10,7 +10,7 @@ from FL_and_DP.fl_utils.optimizier_and_model_distribution import create_model_op
 from data.fed_data_distribution.pathological_nonIID_data import pathological_split_noniid
 from data.get_data import get_data
 from model.CNN import CNN, Cifar10CNN
-from model.modelUtil import mnist_fully_connected, mnist_fully_connected_IN, mnist_fully_connected_IN1
+from model.modelUtil import mnist_fully_connected, mnist_fully_connected_IN, mnist_fully_connected_IN1,Cifar10CNN,Cifar10CNN_IN,Cifar10CNN_IN1
 from train_and_validation.validation import validation
 import torch
 import matplotlib.pyplot as plt
@@ -60,6 +60,7 @@ def fed_avg(train_data, test_data, number_of_clients, learning_rate, momentum, n
 
     # 初始化中心模型,本质上是用来接收客户端的模型并加权平均进行更新的一个变量
     center_model = mnist_fully_connected(10)
+    #center_model = Cifar10CNN
     all_train_loss=[]
     # 各个客户端的model,optimizer,criterion的分配
 
@@ -71,10 +72,11 @@ def fed_avg(train_data, test_data, number_of_clients, learning_rate, momentum, n
         if ptype == 'liner':
             clients_model_list, clients_optimizer_list, clients_criterion_list = create_model_optimizer_criterion_dict(
                 number_of_clients, learning_rate, mnist_fully_connected_IN(10))
+            #clients_model_list, clients_optimizer_list, clients_criterion_list = create_model_optimizer_criterion_dict(number_of_clients, learning_rate, Cifar10CNN_IN)
         if ptype == 'unliner':
             clients_model_list, clients_optimizer_list, clients_criterion_list = create_model_optimizer_criterion_dict(
                 number_of_clients, learning_rate, mnist_fully_connected_IN1(10))
-
+            # clients_model_list, clients_optimizer_list, clients_criterion_list = create_model_optimizer_criterion_dict(number_of_clients, learning_rate, Cifar10CNN_IN1)
     test_dl = torch.utils.data.DataLoader(
         test_data, batch_size=256, shuffle=False)
 

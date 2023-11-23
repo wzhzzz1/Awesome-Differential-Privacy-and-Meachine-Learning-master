@@ -12,6 +12,7 @@ from numpy import median
 import numpy as np
 import torch.nn.functional as func
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+import torch.nn.functional as F
 
 # baseline ,无个性化转换
 class mnist_fully_connected(nn.Module):
@@ -80,7 +81,7 @@ class mnist_fully_connected_IN1(nn.Module):
         self.fc3 = nn.Linear(self.hidden2, num_classes, bias=False)
         self.relu = nn.ReLU(inplace=False)
         self.norm = InputNorm1(1, 28)
-        self.bn = InputNorm2(1, 10)
+        self.bn = OutputNorm1(1, 10)
 
 
     def forward(self, x):
@@ -110,7 +111,7 @@ class InputNorm1(nn.Module):
 
 
 
-class InputNorm2(nn.Module):
+class OutputNorm1(nn.Module):
     def __init__(self, num_channel, num_feature):
         super().__init__()
         self.num_channel = num_channel
@@ -125,112 +126,127 @@ class InputNorm2(nn.Module):
         if self.num_channel == 3:
             return torch.einsum('...ijk, i->...ijk', x, self.gamma) + self.beta
 
-#x = self.gamma * torch.log(1+x)
-'''
-class InputNorm1(nn.Module):
-    def __init__(self, num_channel, num_feature):
-        super().__init__()
-        self.num_channel = num_channel
-        self.gamma = nn.Parameter(torch.ones(num_channel))
-        self.gamma1 = nn.Parameter(torch.ones(num_channel))
-        self.eps = nn.Parameter(torch.ones(num_channel))
-        self.beta = nn.Parameter(torch.zeros(num_channel, num_feature, num_feature))
-
-    def forward(self, x):
-        if self.num_channel == 1:
-            x = self.gamma1 * torch.log(1+x)+self.gamma*x
-            x = x + self.beta
-            return x
-        if self.num_channel == 3:
-            return torch.einsum('...ijk, i->...ijk', x, self.gamma) + self.beta
-'''
 
 
-'''方案1：效果不稳定，好的时候比baseline好一点，坏的时候差一点(原理是在线性变换前引入卷积变换，使的初始特征被表示的更全面了，但是毕竟定义的conv不可学习，或许多引入几个卷积层效果更好)
-class InputNorm1(nn.Module):
-    def __init__(self, num_channel, num_feature):
-        super().__init__()
-        self.num_channel = num_channel
-        self.gamma = nn.Parameter(torch.ones(num_channel))
-        self.beta = nn.Parameter(torch.zeros(num_channel, num_feature, num_feature))
-        self.conv = nn.Sequential(nn.Conv2d(1, 1, 3, 1, padding=1))
+class Cifar10CNN(nn.Module):
+    def __init__(self):
+        super(Cifar10CNN, self).__init__()
+        self.conv= nn.Sequential(
+            nn.Conv2d(3, 32, kernel_size=3, stride=1, padding=1),
+            nn.ReLU(),
+            # nn.MaxPool2d(kernel_size=2, stride=2),
 
-    def forward(self, x):
-        if self.num_channel == 1:
-            temp = self.conv(x)
+            nn.Conv2d(32, 32, kernel_size=3, stride=1, padding=1),
+            nn.ReLU(),
+            nn.MaxPool2d(kernel_size=2, stride=2),
 
-            x = self.gamma * x
-            x = x + self.beta
-            x = x + temp
-            return x
-        if self.num_channel == 3:
-            return torch.einsum('...ijk, i->...ijk', x, self.gamma) + self.beta
+            nn.Conv2d(32, 64, kernel_size=3, stride=1, padding=1),
+            nn.ReLU(),
+            # nn.MaxPool2d(kernel_size=2, stride=2),
+
+            nn.Conv2d(64, 64, kernel_size=3, stride=1, padding=1),
+            nn.ReLU(),
+            nn.MaxPool2d(kernel_size=2, stride=2),
+
+            nn.Conv2d(64, 128, kernel_size=3, stride=1, padding=1),
+            nn.ReLU(),
+            # nn.MaxPool2d(kernel_size=2, stride=2),
+
+            nn.Conv2d(128, 128, kernel_size=3, stride=1, padding=1),
+            nn.ReLU(),
+            # nn.AdaptiveAvgPool2d((1, 1)),
+            nn.MaxPool2d(kernel_size=2, stride=2),
+
+            nn.Flatten(start_dim=1, end_dim=-1),
+            nn.Linear(128*4*4, 128, bias=True),
+            nn.ReLU(),
+            nn.Linear(128, 10, bias=True), )
+
+    def forward(self,x):
+        x=self.conv(x)
+        return x
+
+class Cifar10CNN_IN(nn.Module):
+    def __init__(self):
+        super(Cifar10CNN_IN, self).__init__()
+        self.norm = InputNorm1(1, 32)
+        self.conv= nn.Sequential(
+            nn.Conv2d(3, 32, kernel_size=3, stride=1, padding=1),
+            nn.ReLU(),
+            # nn.MaxPool2d(kernel_size=2, stride=2),
+
+            nn.Conv2d(32, 32, kernel_size=3, stride=1, padding=1),
+            nn.ReLU(),
+            nn.MaxPool2d(kernel_size=2, stride=2),
+
+            nn.Conv2d(32, 64, kernel_size=3, stride=1, padding=1),
+            nn.ReLU(),
+            # nn.MaxPool2d(kernel_size=2, stride=2),
+
+            nn.Conv2d(64, 64, kernel_size=3, stride=1, padding=1),
+            nn.ReLU(),
+            nn.MaxPool2d(kernel_size=2, stride=2),
+
+            nn.Conv2d(64, 128, kernel_size=3, stride=1, padding=1),
+            nn.ReLU(),
+            # nn.MaxPool2d(kernel_size=2, stride=2),
+
+            nn.Conv2d(128, 128, kernel_size=3, stride=1, padding=1),
+            nn.ReLU(),
+            # nn.AdaptiveAvgPool2d((1, 1)),
+            nn.MaxPool2d(kernel_size=2, stride=2),
+
+            nn.Flatten(start_dim=1, end_dim=-1),
+            nn.Linear(128*4*4, 128, bias=True),
+            nn.ReLU(),
+            nn.Linear(128, 10, bias=True), )
+
+    def forward(self,x):
+        x = self.norm(x)
+        x = self.conv(x)
+        return x
 
 
-'''
+class Cifar10CNN_IN1(nn.Module):
+    def __init__(self):
+        super(Cifar10CNN_IN1, self).__init__()
+        self.norm = InputNorm1(1, 32)
+        self.bn = OutputNorm1(1, 10)
+        self.conv= nn.Sequential(
+            nn.Conv2d(3, 32, kernel_size=3, stride=1, padding=1),
+            nn.ReLU(),
+            # nn.MaxPool2d(kernel_size=2, stride=2),
 
-'''方案2：效果稳定，比baseline好挺多的(原理是在线性变换前引入可学习的卷积变换，使的初始特征被表示的更全面了)
-class InputNorm1(nn.Module):
-    def __init__(self, num_channel, num_feature):
-        super().__init__()
-        self.num_channel = num_channel
-        self.gamma = nn.Parameter(torch.ones(num_channel))
-        self.beta = nn.Parameter(torch.zeros(num_channel, num_feature, num_feature))
-        self.conv = nn.Sequential(nn.Conv2d(1, 1, 3, 1, padding=1))
-        self.gamma1 = nn.Parameter(torch.ones(num_channel))
-        self.beta1 = nn.Parameter(torch.zeros(num_channel, num_feature, num_feature))
-    def forward(self, x):
-        if self.num_channel == 1:
-            temp = self.conv(x)*self.gamma1
+            nn.Conv2d(32, 32, kernel_size=3, stride=1, padding=1),
+            nn.ReLU(),
+            nn.MaxPool2d(kernel_size=2, stride=2),
 
-            x = self.gamma * x
-            x = x + self.beta
-            x = x + temp+self.beta1
-            return x
-        if self.num_channel == 3:
-            return torch.einsum('...ijk, i->...ijk', x, self.gamma) + self.beta
-'''
+            nn.Conv2d(32, 64, kernel_size=3, stride=1, padding=1),
+            nn.ReLU(),
+            # nn.MaxPool2d(kernel_size=2, stride=2),
 
-'''方案3，和方案2差不多，但是局部模型效果更好了
-class InputNorm1(nn.Module):
-    def __init__(self, num_channel, num_feature):
-        super().__init__()
-        self.num_channel = num_channel
-        self.gamma = nn.Parameter(torch.ones(num_channel))
-        self.beta = nn.Parameter(torch.zeros(num_channel, num_feature, num_feature))
-        self.conv = nn.Sequential(nn.Conv2d(1, 1, 3, 1, padding=1))
+            nn.Conv2d(64, 64, kernel_size=3, stride=1, padding=1),
+            nn.ReLU(),
+            nn.MaxPool2d(kernel_size=2, stride=2),
 
-    def forward(self, x):
-        if self.num_channel == 1:
-            temp = self.conv(x)*self.gamma
+            nn.Conv2d(64, 128, kernel_size=3, stride=1, padding=1),
+            nn.ReLU(),
+            # nn.MaxPool2d(kernel_size=2, stride=2),
 
-            x = self.gamma * x
-            x = x + self.beta
-            x = x + temp
-            return x
-        if self.num_channel == 3:
-            return torch.einsum('...ijk, i->...ijk', x, self.gamma) + self.beta
-            
-            
+            nn.Conv2d(128, 128, kernel_size=3, stride=1, padding=1),
+            nn.ReLU(),
+            # nn.AdaptiveAvgPool2d((1, 1)),
+            nn.MaxPool2d(kernel_size=2, stride=2),
 
+            nn.Flatten(start_dim=1, end_dim=-1),
+            nn.Linear(128*4*4, 128, bias=True),
+            nn.ReLU(),
+            nn.Linear(128, 10, bias=True), )
 
-class InputNorm1(nn.Module):
-    def __init__(self, num_channel, num_feature):
-        super().__init__()
-        self.num_channel = num_channel
-        self.gamma = nn.Parameter(torch.ones(num_channel))
-        self.beta = nn.Parameter(torch.zeros(num_channel, num_feature, num_feature))
-        self.conv = nn.Sequential(nn.Conv2d(1, 1, 3, 1, padding=1))
-        self.plr = torch.ones(num_channel,device=device)
-    def forward(self, x):
-        if self.num_channel == 1:
-            temp = self.conv(x)*self.plr
-            self.plr = 0.9*self.plr
-            x = self.gamma * x
-            x = x + temp
-            x = x + self.beta
-            return x
-        if self.num_channel == 3:
-            return torch.einsum('...ijk, i->...ijk', x, self.gamma) + self.beta
-'''
+    def forward(self,x):
+        x = self.norm(x)
+        x = self.conv(x)
+        x = self.bn(x)
+        return x
+
 

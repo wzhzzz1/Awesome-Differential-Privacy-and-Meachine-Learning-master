@@ -62,64 +62,181 @@ y2_4 = [33.08, 56.27, 65.64, 68.52, 71.53, 76.66, 78.66, 80.64, 82.45, 82.99,
     92.07, 91.97, 91.92, 92.24, 92.47, 92.55, 92.81, 93.2, 93.58, 93.75]
 
 
-fig, axs = plt.subplots(nrows=1, ncols=4, figsize=(20, 5),dpi=300)
+x3_1 = [i for i in range(1,51)]
+y3_1 = [30.43, 31.21, 38.18, 42.87, 47.61, 51.28, 52.39, 55.58, 55.66, 57.06,
+    56.89, 57.75, 57.32, 58.96, 61.39, 60.77, 62.72, 64.5, 66.32, 68.44,
+    69.73, 70.25, 70.57, 70.97, 71.25, 71.65, 71.91, 71.36, 71.9, 72.48,
+    73.01, 73.58, 74.61, 74.98, 75.12, 75.51, 75.83, 76.29, 76.81, 77.02,
+    77.23, 77.11, 77.47, 77.11, 77.27, 76.44, 77.62, 77.71, 77.91, 77.31]
+
+x3_2 = [i for i in range(1,51)]
+y3_2 = [34.7, 42.53, 48.2, 53.5, 55.09, 57.21, 58.79, 62.65, 63.55, 67.19,
+    68.12, 70.63, 73.1, 71.17, 73.52, 73.38, 74.87, 74.07, 75.32, 75.68,
+    75.7, 77.31, 74.71, 77.36, 75.67, 77.58, 76.38, 77.71, 77.42, 77.61,
+    77.9, 77.38, 76.87, 78.11, 78.32, 77.49, 78.62, 78.51, 79.05, 77.47,
+    79.46, 78.4, 79.38, 79.58, 78.83, 79.38, 80.09, 80.44, 80.78, 81.23]
+
+
+# 第二批数据
+x3_3 = [i for i in range(1,51)]
+y3_3 = [36.26, 38.18, 46.31, 50.17, 54.02, 58.17, 62.87, 64.96, 67.9, 67.86,
+    68.15, 71.01, 70.25, 71.03, 71.66, 73.98, 74.16, 74.46, 74.87, 74.24,
+    76.52, 75.93, 77.04, 76.52, 77.55, 77.26, 77.46, 76.91, 78.05, 78,
+    78.22, 78.03, 78.46, 79.11, 78.47, 78.97, 78.67, 79.22, 79.66, 79.16,
+    80.01, 80.06, 80.18, 79.66, 80.27, 79.01, 79.85, 79.47, 80.1, 80.59]
+
+x3_4 = [i for i in range(1,51)]
+y3_4 = [34.79, 39.35, 45.56, 53.2, 63.82, 64.34, 67.14, 66.7, 70.29, 68.74,
+    71.93, 72.77, 73.66, 74.26, 74.76, 75.32, 74.81, 75.95, 76.68, 77.29,
+    77.77, 77.58, 78.5, 78.87, 78.5, 78.86, 78.96, 78.76, 79.34, 79.3,
+    79.6, 79.89, 80.6, 80.98, 81.11, 81.39, 80.97, 81.13, 81.47, 81.87,
+    81.53, 81.74, 81.45, 81.76, 81.58, 81.98, 82.19, 82.39, 82.73, 82.6]
+
+x4_1 = [i for i in range(1,51)]
+y4_1 = [30.43, 31.21, 38.18, 42.87, 47.61, 51.28, 52.39, 55.58, 55.66, 57.06,
+    56.89, 57.75, 57.32, 58.96, 61.39, 60.77, 62.72, 64.5, 66.32, 68.44,
+    69.73, 70.25, 70.57, 70.97, 71.25, 71.65, 71.91, 71.36, 71.9, 72.48,
+    73.01, 73.58, 74.61, 74.98, 75.12, 75.51, 75.83, 76.29, 76.81, 77.02,
+    77.23, 77.11, 77.47, 77.11, 77.27, 76.44, 77.62, 77.71, 77.91, 77.31]
+
+x4_2 = [i for i in range(1,51)]
+y4_2 = [34.78, 52.58, 53.31, 55.62, 55.37, 57.39, 59.33, 63.36, 64.63, 68.44,
+    69.96, 71.52, 74.15, 73.04, 74.06, 75.26, 76.26, 75.7, 76.96, 77.15,
+    77.55, 78.59, 76.56, 78.53, 78.25, 79.01, 78.38, 79.18, 79.18, 79.19,
+    79.28, 79.28, 79.05, 79.61, 80.27, 79.85, 80.29, 80.08, 80.53, 80.17,
+    80.69, 80.45, 80.6, 80.72, 80.8, 80.65, 80.83, 81.03, 81, 82.13]
+
+
+# 第二批数据
+x4_3 = [i for i in range(1,51)]
+y4_3 = [37.37, 40.56, 47.47, 52.95, 57.19, 61.5, 65.73, 68.11, 71.2, 70.01, 69.93,
+    71.67, 70.56, 70.93, 73.01, 73.87, 74.73, 75.04, 74.92, 74.81, 76.23, 76.15,
+    76.84, 77.24, 77.97, 78.06, 78.37, 78.86, 78.34, 78.45, 78.92, 78.52, 78.64,
+    78.99, 79.21, 79.46, 79.55, 79.35, 79.89, 80.06, 81.26, 81.34, 81.22, 81.98,
+    82.42, 82.19, 82.28, 81.74, 82.23, 82.34]
+
+
+x4_4 = [i for i in range(1,51)]
+y4_4 = [36.42, 40.95, 47.18, 54.9, 65.37, 65.96, 69.21, 67.8, 71.91, 70.32,
+    73.05, 74.19, 75.38, 76.1, 76.24, 76.8, 76.49, 77.11, 78.02, 78.4,
+    79.27, 79.15, 80.15, 80.27, 80.3, 80.21, 80.64, 80.53, 80.92, 81.13,
+    81.46, 81.17, 81.49, 81.92, 82.35, 82.71, 82.93, 82.73, 83.12, 83.48,
+    83.29, 83.5, 83.71, 83.62, 83.29, 83.85, 83.58, 83.81, 83.92, 84.35]
+
+
+fig, axs = plt.subplots(nrows=1, ncols=4, figsize=(20, 5),dpi=600)
 
 # 第一个子图
-axs[0].plot(x1_1, y1_1, marker='s', label='x&x',color='#B22222', markersize=3,linestyle='--',linewidth=1)
-axs[0].plot(x1_2, y1_2, marker='*', label='Liner&x',color='silver', markersize=3,linestyle='--',linewidth=1)
-axs[0].plot(x1_3, y1_3, marker='+', label='x&Liner',color='black', markersize=3,linestyle='--',linewidth=1)
-axs[0].plot(x1_4, y1_4, marker='o', label='Liner&Liner',color='cornflowerblue', markersize=3,linestyle='--',linewidth=1)
+axs[0].plot(x1_1, y1_1, marker='s', label='x&x(Fedavg)',color='#B22222', markersize=3,linestyle='--',linewidth=0.75)
+axs[0].plot(x1_2, y1_2, marker='*', label='Liner&x(Privatefl)',color='c', markersize=3,linestyle='-.',linewidth=0.75)
+axs[0].plot(x1_3, y1_3, marker='+', label='x&Liner',color='black', markersize=3,linestyle=':',linewidth=0.75)
+axs[0].plot(x1_4, y1_4, marker='>', label='Liner&Liner(PDPFL)',color='cornflowerblue', markersize=3,linestyle='-',linewidth=0.75)
 
-axs[0].legend()
+axs[0].legend(loc='lower right')
 axs[0].grid(True,linestyle='--')
 axs[0].set_xlabel('Epoch')
 axs[0].set_ylabel('Accuracy(global model)')
+# 注释（标注）
+axs[0].annotate(
+    text='92.87',  # 标注的内容
+    xy=(50, 92.87),  # 标注的坐标点
+    xytext=(41, 97.5),  # 标注的内容的坐标点
+    # 箭头
+    arrowprops={
+             'width': 1,  # 箭头线的宽度
+        'headwidth': 6,  # 箭头头部的宽度
+        'facecolor': 'cornflowerblue' , # 箭头的背景颜色
+        'edgecolor':  'cornflowerblue'
+
+    }
+)
 
 # 第二个子图
-axs[1].plot(x2_1, y2_1, marker='s', label='x&x',color='#B22222', markersize=3,linestyle='--',linewidth=2)
-axs[1].plot(x2_2, y2_2, marker='*', label='Liner&x',color='silver', markersize=3,linestyle='--',linewidth=2)
-axs[1].plot(x2_3, y2_3, marker='+', label='x&Liner',color='black', markersize=3,linestyle='--',linewidth=2)
-axs[1].plot(x2_4, y2_4, marker='o', label='Liner&Liner',color='cornflowerblue', markersize=3,linestyle='--',linewidth=2)
+axs[1].plot(x2_1, y2_1, marker='s', label='x&x(Fedavg)',color='#B22222', markersize=3,linestyle='--',linewidth=0.75)
+axs[1].plot(x2_2, y2_2, marker='*', label='Liner&x(Privatefl)',color='c', markersize=3,linestyle='-.',linewidth=0.75)
+axs[1].plot(x2_3, y2_3, marker='+', label='x&Liner',color='black', markersize=3,linestyle=':',linewidth=0.75)
+axs[1].plot(x2_4, y2_4, marker='>', label='Liner&Liner(PDPFL)',color='cornflowerblue', markersize=3,linestyle='-',linewidth=0.75)
 
-axs[1].legend()
+axs[1].legend(loc='lower right')
 axs[1].grid(True,linestyle='--')
 axs[1].set_xlabel('Epoch')
-axs[1].set_ylabel('Accuracy(global model)')
+axs[1].set_ylabel(' Max accuracy(local model)')
 
-'''
-# 第二个子图
-axs[1].plot(x2_part1, y2_part1, marker='s', label='LDP',color='#B22222', markersize=8,linestyle='--',linewidth=2)
-axs[1].plot(x2_part2, y2_part2, marker='*', label='Noise-Free',color='black', markersize=8,linewidth=2)
-axs[1].set_xlabel('epsilon')
-axs[1].set_ylabel('Heterogeneity(sum of loss)')
+axs[1].annotate(
+    text='93.75',  # 标注的内容
+    xy=(50, 93.75),  # 标注的坐标点
+    xytext=(41, 97.5),  # 标注的内容的坐标点
+    # 箭头
+    arrowprops={
+             'width': 1,  # 箭头线的宽度
+        'headwidth': 6,  # 箭头头部的宽度
+        'facecolor': 'cornflowerblue' , # 箭头的背景颜色
+        'edgecolor':  'cornflowerblue'
 
-axs[1].legend()
-axs[1].grid(True,linestyle='--')
+    }
+)
+# 第三个子图
+axs[2].plot(x3_1, y3_1, marker='s', label='x&x(Fedavg)',color='#B22222', markersize=3,linestyle='--',linewidth=0.75)
+axs[2].plot(x3_2, y3_2, marker='*', label='Liner&x(Privatefl)',color='c', markersize=3,linestyle='-.',linewidth=0.75)
+axs[2].plot(x3_3, y3_3, marker='+', label='x&Liner',color='black', markersize=3,linestyle=':',linewidth=0.75)
+axs[2].plot(x3_4, y3_4, marker='>', label='Liner&Liner(PDPFL)',color='cornflowerblue', markersize=3,linestyle='--',linewidth=0.75)
 
-axs[2].plot(x1_part1, y1_part1, marker='s', label='LDP',color='#B22222', markersize=8,linestyle='--',linewidth=2)
-axs[2].plot(x1_part2, y1_part2, marker='*', label='Noise-Free',color='black', markersize=8,linewidth=2)
-
-axs[2].legend()
+axs[2].legend(loc='lower right')
 axs[2].grid(True,linestyle='--')
-axs[2].set_xlabel('epsilon')
-axs[2].set_ylabel('Heterogeneity(sum of loss)')
+axs[2].set_xlabel('Epoch')
+axs[2].set_ylabel('Accuracy(global model)')
 
-axs[3].plot(x1_part1, y1_part1, marker='s', label='LDP',color='#B22222', markersize=8,linestyle='--',linewidth=2)
-axs[3].plot(x1_part2, y1_part2, marker='*', label='Noise-Free',color='black', markersize=8,linewidth=2)
+axs[2].annotate(
+    text='82.6',  # 标注的内容
+    xy=(50, 82.6),  # 标注的坐标点
+    xytext=(42, 88),  # 标注的内容的坐标点
+    # 箭头
+    arrowprops={
+             'width': 1,  # 箭头线的宽度
+        'headwidth': 6,  # 箭头头部的宽度
+        'facecolor': 'cornflowerblue' , # 箭头的背景颜色
+        'edgecolor':  'cornflowerblue'
 
-axs[3].legend()
+    }
+)
+# 第四个子图
+axs[3].plot(x4_1, y4_1, marker='s', label='x&x(Fedavg)',color='#B22222', markersize=3,linestyle='--',linewidth=0.75)
+axs[3].plot(x4_2, y4_2, marker='*', label='Liner&x(Privatefl)',color='c', markersize=3,linestyle='-.',linewidth=0.75)
+axs[3].plot(x4_3, y4_3, marker='+', label='x&Liner',color='black', markersize=3,linestyle=':',linewidth=0.75)
+axs[3].plot(x4_4, y4_4, marker='>', label='Liner&Liner(PDPFL)',color='cornflowerblue', markersize=3,linestyle='--',linewidth=0.75)
+
+axs[3].legend(loc='lower right')
 axs[3].grid(True,linestyle='--')
-axs[3].set_xlabel('epsilon')
-axs[3].set_ylabel('Heterogeneity(sum of loss)')
-'''
+axs[3].set_xlabel('Epoch')
+axs[3].set_ylabel(' Max accuracy(local model)')
+
+axs[3].annotate(
+    text='84.35',  # 标注的内容
+    xy=(50, 84.35),  # 标注的坐标点
+    xytext=(42, 90),  # 标注的内容的坐标点
+    # 箭头
+    arrowprops={
+             'width': 1,  # 箭头线的宽度
+        'headwidth': 6,  # 箭头头部的宽度
+        'facecolor': 'cornflowerblue' , # 箭头的背景颜色
+        'edgecolor':  'cornflowerblue'
+
+    }
+)
+
+for ax in axs:
+    ax.set_yticks(range(10, 101, 20))  # 设置 y 轴刻度为 10 的倍数，范围为 10 到 100
+    ax.set_ylim(20, 100)  # 设置 y 轴范围从 10 到 100
 # 调整布局
 plt.tight_layout()
 
 
 # 显示图形
-fig.text(0.289, 0.009, '(a)IID', ha='center')
-fig.text(0.782, 0.009, '(b)NO-IID', ha='center')
-plt.subplots_adjust(bottom=0.13)
+fig.text(0.145, 0.009, '(a) MNIST dataset', ha='center')
+fig.text(0.392, 0.009, '(b) MNIST dataset', ha='center')
+fig.text(0.642, 0.009, '(c) FMNIST dataset', ha='center')
+fig.text(0.892, 0.009, '(d) FMNIST dataset', ha='center')
+plt.subplots_adjust(bottom=0.128)
 plt.show()
 fig.savefig('my_plot.png', dpi=300)
 
