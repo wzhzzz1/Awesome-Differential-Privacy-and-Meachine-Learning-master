@@ -22,14 +22,26 @@ def PM_adding_noise(model,epsilon): #这个地方可能最好调用以下ray来�
                 bound = max(abs(max_value),abs(min_value))
                 per_data_parameters_grad_dict[key] = per_data_parameters_grad_dict[key]/bound
                 temp = per_data_parameters_grad_dict[key].cpu().numpy()
-                num_rows, num_cols = temp.shape
-                for i in range(num_rows):  # 遍历行
-                    for j in range(num_cols):  # 遍历列
-                        temp[i][j] = PM(epsilon, temp[i][j])
+                if len(temp.shape) == 2:
+                    num_rows, num_cols = temp.shape
+                    for i in range(num_rows):  # 遍历行
+                        for j in range(num_cols):  # 遍历列
+                            temp[i][j] = PM(epsilon, temp[i][j])
+                elif len(temp.shape) == 1:
+                    num_rows = len(temp)
+                    for i in range(num_rows):  # 遍历行
+                        temp[i] = PM(epsilon, temp[i])
+                elif len(temp.shape) == 4:
+                    num_rows, num_cols ,num_x,num_y= temp.shape
+                    for i in range(num_rows):  # 遍历行
+                        for j in range(num_cols):  # 遍历列
+                            for m in range(num_x):
+                                for n in range(num_y):
+                                    temp[i][j] = PM(epsilon, temp[i][j][m][n])
                 per_data_parameters_grad_dict[key] = torch.tensor(temp).to(device) * bound
 
         #问题出现在这个model.load_state_dict,我们看一下具体是什么问题
-        model.load_state_dict(per_data_parameters_grad_dict, strict=True)
+        #model.load_state_dict(per_data_parameters_grad_dict, strict=True)
     return model
 
 
