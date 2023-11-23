@@ -48,6 +48,7 @@ def get_data(name, augment=False, **kwargs):
             transforms.ToTensor(),
             # transforms.Normalize((0.1307,), (0.3081,))
         ])
+        transform = transforms.ToTensor()
         train_set = datasets.FashionMNIST(root='../data', train=True,
                                           transform=transform,
                                           download=True)

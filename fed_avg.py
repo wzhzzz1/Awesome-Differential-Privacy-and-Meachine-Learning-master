@@ -22,7 +22,7 @@ import math
 def parse_arguments():
     parser = argparse.ArgumentParser()
     parser.add_argument('--data', type=str, default='mnist',
-                        choices=['mnist', 'cifar10', 'cifar100', 'fashionmnist', 'emnist', 'purchase', 'chmnist'])
+                        choices=['mnist', 'cifar10', 'cifar100', 'fmnist', 'emnist', 'purchase', 'chmnist'])
     parser.add_argument('--client', type=int, default=10)
     parser.add_argument('--batchsize', type=int, help='the number of class for this dataset', default=64)
     parser.add_argument('--epoch', type=int, default=1)
