@@ -37,7 +37,13 @@ def PM_adding_noise(model,epsilon): #这个地方可能最好调用以下ray来�
                         for j in range(num_cols):  # 遍历列
                             for m in range(num_x):
                                 for n in range(num_y):
-                                    temp[i][j] = PM(epsilon, temp[i][j][m][n])
+                                    temp[i][j][m][n] = PM(epsilon, temp[i][j][m][n])
+                elif len(temp.shape) == 3:
+                    num_rows, num_cols ,num_x= temp.shape
+                    for i in range(num_rows):  # 遍历行
+                        for j in range(num_cols):  # 遍历列
+                            for m in range(num_x):
+                                temp[i][j][m] = PM(epsilon, temp[i][j][m])
                 per_data_parameters_grad_dict[key] = torch.tensor(temp).to(device) * bound
 
         #问题出现在这个model.load_state_dict,我们看一下具体是什么问题
