@@ -59,7 +59,7 @@ def fed_avg(train_data, test_data, number_of_clients, learning_rate, momentum, n
 
     # 初始化中心模型,本质上是用来接收客户端的模型并加权平均进行更新的一个变量
     center_model = mnist_fully_connected(10)
-    #center_model = Cifar10CNN()
+    #center_model = ResNet18()
     all_train_loss=[]
     # 各个客户端的model,optimizer,criterion的分配
 
