@@ -9,8 +9,7 @@ from data.fed_data_distribution.dirichlet_nonIID_data import fed_dataset_NonIID_
 from FL_and_DP.fl_utils.optimizier_and_model_distribution import create_model_optimizer_criterion_dict
 from data.fed_data_distribution.pathological_nonIID_data import pathological_split_noniid
 from data.get_data import get_data
-from model.CNN import CNN, Cifar10CNN
-from model.modelUtil import mnist_fully_connected, mnist_fully_connected_IN, mnist_fully_connected_IN1,Cifar10CNN,Cifar10CNN_IN,Cifar10CNN_IN1
+from model.modelUtil import mnist_fully_connected, mnist_fully_connected_IN, mnist_fully_connected_IN1,Cifar10CNN,Cifar10CNN_IN,Cifar10CNN_IN1,ResNet18
 from train_and_validation.validation import validation
 import torch
 import matplotlib.pyplot as plt
