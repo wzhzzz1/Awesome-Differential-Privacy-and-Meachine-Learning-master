@@ -63,7 +63,7 @@ net = LeNet().to(device)
 
 torch.manual_seed(1234)
 
-#net.apply(weights_init)
+net.apply(weights_init)
 criterion = cross_entropy_for_onehot  # 调用损失函数
 
 # compute original gradient 
