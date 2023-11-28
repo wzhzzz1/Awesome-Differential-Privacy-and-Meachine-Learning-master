@@ -54,7 +54,7 @@ gt_label = torch.Tensor([data_cifar[img_index][1]]).long().to(device)
 gt_label = gt_label.view(1, )
 gt_onehot_label = label_to_onehot(gt_label)
 
-plt.imshow(To_image(gt_data[0].cpu()))
+plt.imshow(To_image(gt_data[0].cpu()),cmap='gray')
 plt.axis('off')
 plt.savefig("./attack_image/sample.png")
 plt.clf()
@@ -92,8 +92,8 @@ pat_4 = torch.cat((pat_2,pat_2),dim=2)
 dummy_data = torch.unsqueeze(pat_4,dim=0).to(device).requires_grad_(True)
 dummy_label = torch.randn(gt_onehot_label.size()).to(device).requires_grad_(True)
 
-#plt.imshow(To_image(dummy_data[0].cpu()))
-plt.imshow(tp(gt_data[imidx].cpu()), cmap='gray')   #灰度图像专用
+plt.imshow(To_image(dummy_data[0].cpu()))
+#plt.imshow(tp(gt_data[imidx].cpu()), cmap='gray')   #灰度图像专用
 optimizer = torch.optim.LBFGS([dummy_data, dummy_label])
 
 history = []
