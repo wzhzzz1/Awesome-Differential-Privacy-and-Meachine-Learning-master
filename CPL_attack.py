@@ -59,7 +59,7 @@ plt.axis('off')
 plt.savefig("./attack_image/sample.png")
 plt.clf()
 
-net = mnist_fully_connected(10).to(device)
+net = mnist_fully_connected_IN1(10).to(device)
 
 torch.manual_seed(1234)
 
@@ -70,7 +70,7 @@ criterion = cross_entropy_for_onehot  # 调用损失函数
 pred = net(gt_data)
 y = criterion(pred, gt_onehot_label)
 dy_dx = torch.autograd.grad(y, net.parameters())  # 获取对参数W的梯度
-
+print([param.grad.shape for param in dy_dx])
 original_dy_dx = list((_.detach().clone() for _ in dy_dx))  # 对原始梯度复制
 
 '''
