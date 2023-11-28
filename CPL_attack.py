@@ -11,7 +11,7 @@ import torch.nn.functional as F
 from torch.autograd import grad
 import torchvision
 from torchvision import models, datasets, transforms
-from models.vision import LeNet, ResNet18
+from model.vision import LeNet, ResNet18
 from model.modelUtil import mnist_fully_connected, mnist_fully_connected_IN, mnist_fully_connected_IN1
 
 def label_to_onehot(target, num_classes=100):
