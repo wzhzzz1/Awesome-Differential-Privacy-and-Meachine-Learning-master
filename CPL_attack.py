@@ -55,7 +55,7 @@ gt_label = gt_label.view(1, )
 gt_onehot_label = label_to_onehot(gt_label)
 
 plt.imshow(To_image(gt_data[0].cpu()))
-plt.savefig("./attack_image/sample.png")
+plt.savefig("./attack_image/sample.png",dpi=300)
 plt.clf()
 
 net = LeNet().to(device)
