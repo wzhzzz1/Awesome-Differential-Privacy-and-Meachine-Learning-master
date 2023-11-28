@@ -35,7 +35,7 @@ if torch.cuda.is_available():
     device = "cuda"
 print("Running on %s" % device)
 
-data_cifar = datasets.FashionMNISTMNIST("../data", download=True)
+data_cifar = datasets.FashionMNIST("../data", download=True)
 To_tensor = transforms.ToTensor()
 To_image = transforms.ToPILImage()
 
