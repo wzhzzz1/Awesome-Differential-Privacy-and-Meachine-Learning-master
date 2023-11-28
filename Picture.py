@@ -1,3 +1,139 @@
+'''
+#论文图7
+
+import matplotlib.pyplot as plt
+
+# 第一批数据
+x1_1 = [8,10,12,14]
+y1_1 = [2.872	,2.478	,2.19	,1.978]
+
+x1_2 = [8,10,12,14]
+y1_2 = [2.716	,2.375	,2.105	,1.92]
+
+
+# 第二批数据
+x1_3 = [8,10,12,14]
+y1_3 = [2.598	,2.254	,2.04	,1.89]
+
+
+
+x2_1 = [8,10,12,14]
+y2_1 = [1.72	,1.52	,1.325	,1.198]
+
+x2_2 = [8,10,12,14]
+y2_2 = [1.63	,1.43	,1.258	,1.147]
+
+
+# 第二批数据
+x2_3 = [8,10,12,14]
+y2_3 = [1.55	,1.35,	1.204	,1.125]
+
+
+
+
+x3_1 = [8,10,12,14]
+y3_1 = [0.852	,0.621	,0.486,	0.397]
+
+x3_2 = [8,10,12,14]
+y3_2 = [0.721	,0.533	,0.428	,0.345]
+
+
+# 第二批数据
+x3_3 = [8,10,12,14]
+y3_3 = [0.664	,0.492	,0.395	,0.333]
+
+
+
+x4_1 = [8,10,12,14]
+y4_1 = [0.218	,0.154	,0.112	,0.088445695]
+
+x4_2 = [8,10,12,14]
+y4_2 = [0.202	,0.145	,0.103	,0.082]
+
+
+# 第二批数据
+x4_3 = [8,10,12,14]
+y4_3 = [0.189	,0.138	,0.098	,0.078]
+
+
+
+
+
+fig, axs = plt.subplots(nrows=1, ncols=4, figsize=(20, 5),dpi=300)
+
+# 第一个子图
+axs[0].plot(x1_1, y1_1, marker='s', label='x&x(Fedavg)',color='#B22222', markersize=3,linestyle='--',linewidth=0.75)
+axs[0].plot(x1_2, y1_2, marker='*', label='Liner&x(Privatefl)',color='c', markersize=3,linestyle='-.',linewidth=0.75)
+axs[0].plot(x1_3, y1_3, marker='+', label='Liner&Liner',color='black', markersize=3,linestyle='-',linewidth=0.75)
+
+
+axs[0].legend(loc='upper right')
+axs[0].grid(True,linestyle='--')
+axs[0].set_xlabel('Epsilon')
+axs[0].set_ylabel('Heterogeneity(sum of loss)')
+# 注释（标注）
+
+
+# 第二个子图
+axs[1].plot(x2_1, y2_1, marker='s', label='x&x(Fedavg)',color='#B22222', markersize=3,linestyle='--',linewidth=0.75)
+axs[1].plot(x2_2, y2_2, marker='*', label='Liner&x(Privatefl)',color='c', markersize=3,linestyle='-.',linewidth=0.75)
+axs[1].plot(x2_3, y2_3, marker='+', label='Liner&Liner',color='black', markersize=3,linestyle='-',linewidth=0.75)
+
+
+axs[1].legend(loc='upper right')
+axs[1].grid(True,linestyle='--')
+axs[1].set_xlabel('Epsilon')
+axs[1].set_ylabel('Heterogeneity(sum of loss)')
+
+
+# 第三个子图
+axs[2].plot(x3_1, y3_1, marker='s', label='x&x(Fedavg)',color='#B22222', markersize=3,linestyle='--',linewidth=0.75)
+axs[2].plot(x3_2, y3_2, marker='*', label='Liner&x(Privatefl)',color='c', markersize=3,linestyle='-.',linewidth=0.75)
+axs[2].plot(x3_3, y3_3, marker='+', label='Liner&Liner',color='black', markersize=3,linestyle='-',linewidth=0.75)
+
+
+axs[2].legend(loc='upper right')
+axs[2].grid(True,linestyle='--')
+axs[2].set_xlabel('Epsilon')
+axs[2].set_ylabel('Heterogeneity(sum of loss)')
+
+
+# 第四个子图
+axs[3].plot(x4_1, y4_1, marker='s', label='x&x(Fedavg)',color='#B22222', markersize=3,linestyle='--',linewidth=0.75)
+axs[3].plot(x4_2, y4_2, marker='*', label='Liner&x(Privatefl)',color='c', markersize=3,linestyle='-.',linewidth=0.75)
+axs[3].plot(x4_3, y4_3, marker='+', label='Liner&Liner',color='black', markersize=3,linestyle='-',linewidth=0.75)
+
+
+axs[3].legend(loc='upper right')
+axs[3].grid(True,linestyle='--')
+axs[3].set_xlabel('Epsilon')
+axs[3].set_ylabel('Heterogeneity(sum of loss)')
+
+
+
+axs[0].set_yticks(range(1, 4, 1))  # 设置 y 轴刻度为 10 的倍数，范围为 10 到 100
+axs[0].set_ylim(1, 3)  # 设置 y 轴范围从 10 到 100
+# 调整布局
+axs[1].set_yticks(range(1, 4, 1))  # 设置 y 轴刻度为 10 的倍数，范围为 10 到 100
+axs[1].set_ylim(1, 3)  # 设置 y 轴范围从 10 到 100
+plt.tight_layout()
+
+
+
+
+# 显示图形
+fig.text(0.134, 0.009, r'(a) $\beta$ = 0.5', ha='center')
+fig.text(0.385, 0.009, r'(a) $\beta$ = 1', ha='center')
+fig.text(0.635, 0.009, r'(a) $\beta$ = 5', ha='center')
+fig.text(0.885, 0.009, r'(a) $\beta$ = 100', ha='center')
+plt.subplots_adjust(bottom=0.128)
+plt.show()
+fig.savefig('my_plot.png', dpi=1200)
+'''
+
+
+#论文图6
+
 import matplotlib.pyplot as plt
 
 # 第一批数据
@@ -124,7 +260,7 @@ y4_4 = [36.42, 40.95, 47.18, 54.9, 65.37, 65.96, 69.21, 67.8, 71.91, 70.32,
     83.29, 83.5, 83.71, 83.62, 83.29, 83.85, 83.58, 83.81, 83.92, 84.35]
 
 
-fig, axs = plt.subplots(nrows=1, ncols=4, figsize=(20, 5),dpi=600)
+fig, axs = plt.subplots(nrows=1, ncols=4, figsize=(20, 5),dpi=300)
 
 # 第一个子图
 axs[0].plot(x1_1, y1_1, marker='s', label='x&x(Fedavg)',color='#B22222', markersize=3,linestyle='--',linewidth=0.75)
@@ -232,13 +368,15 @@ plt.tight_layout()
 
 
 # 显示图形
-fig.text(0.145, 0.009, '(a) MNIST dataset', ha='center')
-fig.text(0.392, 0.009, '(b) MNIST dataset', ha='center')
-fig.text(0.642, 0.009, '(c) FMNIST dataset', ha='center')
-fig.text(0.892, 0.009, '(d) FMNIST dataset', ha='center')
+fig.text(0.142, 0.009, '(a) MNIST dataset', ha='center')
+fig.text(0.390, 0.009, '(b) MNIST dataset', ha='center')
+fig.text(0.638, 0.009, '(c) FMNIST dataset', ha='center')
+fig.text(0.888, 0.009, '(d) FMNIST dataset', ha='center')
 plt.subplots_adjust(bottom=0.128)
 plt.show()
-fig.savefig('my_plot.png', dpi=300)
+fig.savefig('my_plot.png', dpi=1200)
+
+
 
 
 
