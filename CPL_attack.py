@@ -43,7 +43,7 @@ tt = transforms.ToPILImage()
 criterion = nn.CrossEntropyLoss()
 
 for item in range(1):
-    start = time.clock()
+    start = time.time()
     for rd in range(1):
 
         torch.manual_seed(200*rd)
@@ -224,6 +224,6 @@ for item in range(1):
         plt.savefig("./attack_image/index_%s_rand_%s_label_%s"%(item,rd, label_pred.item()))
         #plt.clf()
        
-    duration = time.clock()-start
+    duration = time.time()-start
     #print ("Running time is %.4f." %(duration/10.0) )
     print (duration/10.0 )
