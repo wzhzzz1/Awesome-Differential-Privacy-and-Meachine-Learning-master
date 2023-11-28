@@ -1,6 +1,6 @@
-%matplotlib inline
+
 import time
- 
+get_ipython().run_line_magic('matplotlib', 'inline')
 from pytorch_msssim import ssim
 import numpy as np
 from pprint import pprint
