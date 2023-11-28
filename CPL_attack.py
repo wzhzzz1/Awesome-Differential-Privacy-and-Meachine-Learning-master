@@ -46,7 +46,7 @@ gt_data = To_tensor(data_cifar[img_index][0]).to(
 
 if len(args.image) > 1:  # 得到预设参数的图片并将其转换为tensor对象
     gt_data = Image.open(args.image)
-    gt_data = To_tensor(gt_data).to(device)
+    gt_data = To_tensor(gt_data).resize(32,32).to(device)
 
 gt_data = gt_data.view(1, *gt_data.size())
 
