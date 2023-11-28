@@ -76,7 +76,7 @@ original_dy_dx = list((_.detach().clone() for _ in dy_dx))  # 对原始梯度复
 # generate dummy data and label
 dummy_data = torch.randn(gt_data.size()).to(device).requires_grad_(True)
 
-dummy_data = torch.unsqueeze(eee,dim=0).to(device).requires_grad_(True)
+
 dummy_label = torch.randn(gt_onehot_label.size()).to(device).requires_grad_(True)
 
 plt.imshow(To_image(dummy_data[0].cpu()))
