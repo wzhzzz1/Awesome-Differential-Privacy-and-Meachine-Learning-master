@@ -1,7 +1,4 @@
-
-import time
-get_ipython().run_line_magic('matplotlib', 'inline')
-from pytorch_msssim import ssim
+import argparse
 import numpy as np
 from pprint import pprint
 
@@ -14,218 +11,97 @@ import torch.nn.functional as F
 from torch.autograd import grad
 import torchvision
 from torchvision import models, datasets, transforms
-import torch.nn.functional as func
-'''
-def deep_leakage_from_gradients(model, origin_grad):
-    dummy_data = torch.randn(origin_data.size())
-    dummy_label = torch.randn(dummy_label.size())
-    optimizer = torch.optim.LBFGS([dummy_data, dummy_label])
 
-    for iters in range(300):
-        def closure():
-            optimizer.zero_grad()
-            dummy_pred = model(dummy_data)
-            dummy_loss = criterion(dummy_pred, dummy_label)
-            dummy_grad = grad(dummy_loss, model.parameters(), create_graph=True)
+from utils import label_to_onehot, cross_entropy_for_onehot  # 将标签onehot化   并使用onehot形式的交叉熵损失函数
+from models.vision import LeNet, ResNet18
+from model.modelUtil import mnist_fully_connected, mnist_fully_connected_IN, mnist_fully_connected_IN1
+parser = argparse.ArgumentParser(description='Deep Leakage from Gradients.')
+parser.add_argument('--index', type=int, default="45",
+                    help='the index for leaking images on CIFAR.')
+parser.add_argument('--image', type=str, default="",
+                    help='the path to customized image.')
+args = parser.parse_args()
 
-            grad_diff = sum(((dummy_grad - origin_grad) ** 2).sum() \
-                            for dummy_g, origin_g in zip(dummy_grad, origin_grad))
+device = "cpu"
+if torch.cuda.is_available():
+    device = "cuda"
+print("Running on %s" % device)
 
-            grad_diff.backward()
-            return grad_diff
+data_cifar = datasets.CIFAR100("/.torch", download=True)
+To_tensor = transforms.ToTensor()
+To_image = transforms.ToPILImage()
 
-        optimizer.step(closure)
+img_index = args.index
 
-    return dummy_data, dummy_label
-'''
-tt = transforms.ToPILImage()
-device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-#print (ssim(0.43*torch.unsqueeze(gt_data[0],dim=0),torch.unsqueeze(gt_data[0],dim=0),data_range=0).item())  #计算图像相似度，值在0到1之间，越接近1代表越相似
-#print (torch.dist(0.6*torch.unsqueeze(gt_data[0],dim=0),torch.unsqueeze(gt_data[0],dim=0),2).item())  #计算图像距离
-criterion = nn.CrossEntropyLoss()
+gt_data = To_tensor(data_cifar[img_index][0]).to(
+    device)  # image_index[i][0]表示的是第I张图片的data，image_index[i][1]表示的是第i张图片的lable
 
-for item in range(1):
-    start = time.time()
-    for rd in range(1):
+if len(args.image) > 1:  # 得到预设参数的图片并将其转换为tensor对象
+    gt_data = Image.open(args.image)
+    gt_data = To_tensor(gt_data).to(device)
 
-        torch.manual_seed(200*rd)
-        #dummy_data = torch.unsqueeze(torch.randn(gt_data[item].size()),0).to(device).requires_grad_(True)
-        
-        #dummy_data = torch.unsqueeze(torch.zeros(gt_data[item].size()),0).to(device).requires_grad_(True)
-        #dummy_data = torch.unsqueeze(torch.ones(gt_data[item].size()),0).to(device).requires_grad_(True)
+gt_data = gt_data.view(1, *gt_data.size())
 
-        
-        #background = torch.unsqueeze(torch.zeros(gt_data[item].size()),0)
-        #background[0,0,::] = 1
-        #dummy_data = background.to(device).requires_grad_(True)
-        ##dummy_data = (torch.unsqueeze(torch.randn(gt_data[item].size()),0)+background).to(device).requires_grad_(True)
-        
-        #surrogate = torch.unsqueeze(gt_data[item+1],0)
-        #aaa = torch.rand([3,16,16])
-        #surrogate[0,:,8:24,8:24] =aaa
-        #dummy_data = surrogate.to(device).requires_grad_(True)    
-        
-        #dummy_data = torch.unsqueeze(gt_data[item+1],0).to(device).requires_grad_(True)
-        
-        #k = np.random.randint(0,95)
-        #dummy_data = torch.unsqueeze(gt_data[k],0).to(device).requires_grad_(True)
-        
-        
-        pat_1 = torch.rand([3,14,14])
-        pat_2 = torch.cat((pat_1,pat_1),dim=1)
-        pat_4 = torch.cat((pat_2,pat_2),dim=2)
-        dummy_data = torch.unsqueeze(pat_4,dim=0).to(device).requires_grad_(True)
-        
-        
-        #aaa = torch.rand([3,8,8])
-        #bbb = torch.cat((aaa,aaa),dim=1)
-        #ccc = torch.cat((bbb,bbb),dim=1)
-        #ddd = torch.cat((ccc,ccc),dim=2)
-        #eee = torch.cat((ddd,ddd),dim=2)
-        #dummy_data = torch.unsqueeze(eee,dim=0).to(device).requires_grad_(True)
-        
-        #aaa = torch.rand([3,4,4])
-        #bbb = torch.cat((aaa,aaa),dim=1)
-        #ccc = torch.cat((bbb,bbb),dim=1)
-        #ddd = torch.cat((ccc,ccc),dim=1)
-        #eee = torch.cat((ddd,ddd),dim=2)
-        #fff = torch.cat((eee,eee),dim=2)
-        #ggg = torch.cat((fff,fff),dim=2)
-        #dummy_data = torch.unsqueeze(ggg,dim=0).to(device).requires_grad_(True)
-        
-        
-        #dummy_data = plt.imread("./attack_image/replacement_69.png")
-        #print (dummy_data.shape)
-        #dummy_data = torch.FloatTensor(dummy_data).to(device)
-        #dummy_data = dummy_data.transpose(2,3).transpose(1,2)
-        
+gt_label = torch.Tensor([data_cifar[img_index][1]]).long().to(device)
+gt_label = gt_label.view(1, )
+gt_onehot_label = label_to_onehot(gt_label)
 
-        label_pred=torch.argmin(torch.sum(original_dy_dx[item][-2], dim=-1), 
-                                dim=-1).detach().reshape((1,)).requires_grad_(False)
-        #print (original_dy_dx[item][-1].shape)
-        #print (original_dy_dx[item][-1].argmin())
-        
-        #print (torch.sum(original_dy_dx[item][-2], dim=-1).argmin())
-        
-        plt.imshow(tt(dummy_data[0].cpu()))
-        plt.title("Dummy data")
-        #plt.savefig("./random_seed/index_%s_rand_seed_%s_label_%s"%(item,rd,torch.argmax(dummy_label, dim=-1).item()))
+plt.imshow(To_image(gt_data[0].cpu()))
+plt.savefig("./attack_image/sample.png")
+plt.clf()
 
-        plt.clf()
+net = LeNet().to(device)
 
-        print("stolen label is %d." % label_pred.item())
-        
-        
-        #optimizer = torch.optim.LBFGS([dummy_data,dummy_label])
-        optimizer = torch.optim.LBFGS([dummy_data,])
-        #optimizer = torch.optim.AdamW([dummy_data,],lr=0.01)
-        #optimizer = torch.optim.SGD([dummy_data,],lr=0.01)
-      
-       
+torch.manual_seed(1234)
 
-        history = []
-        
-        percept_dis = np.zeros(300)
-        recover_dis = np.zeros(300)
-        for iters in range(300):
-            
-          
-            #percept_dis[iters]=ssim(dummy_data,torch.unsqueeze(gt_data[item],dim=0),data_range=0).item()
-            #recover_dis[iters]=torch.dist(dummy_data,torch.unsqueeze(gt_data[item],dim=0),2).item()
-           
-            history.append(tt(dummy_data[0].cpu()))
-            def closure():
-                optimizer.zero_grad()
+# net.apply(weights_init)
+criterion = cross_entropy_for_onehot  # 调用损失函数
 
-                pred = net(dummy_data) 
-                
-                #dummy_onehot_label = F.softmax(dummy_label, dim=-1).long()
-                
-                #dummy_loss = criterion(pred, dummy_onehot_label) # TODO: fix the gt_label to dummy_label in both code and slides.
-                ##print (pred)
-                ##print (label_pred)
-            
-                dummy_loss = criterion(pred, label_pred)
-                dummy_dy_dx = torch.autograd.grad(dummy_loss, net.parameters(), create_graph=True)
-                ##dummy_dy_dp = torch.autograd.grad(dummy_loss, dummy_data, create_graph=True)
-                ##print (dummy_dy_dp[0].shape)  
+# compute original gradient 
+pred = net(gt_data)
+y = criterion(pred, gt_onehot_label)
+dy_dx = torch.autograd.grad(y, net.parameters())  # 获取对参数W的梯度
 
-                grad_diff = 0
-                grad_count = 0
-                #count =0
-                for gx, gy in zip(dummy_dy_dx, original_dy_dx[item]): # TODO: fix the variablas here
-                   
-                    #if iters==500 or iters== 1200:
-                    #print (gx[0])
-                    #    print ('hahaha')
-                    #print (gy[0])
-                    lasso = torch.norm(dummy_data,p=1)
-                    ridge = torch.norm(dummy_data,p=2)
-                    grad_diff += ((gx - gy) ** 2).sum() #+ 0.0*lasso +0.01*ridge 
-                    
-                    #print (gx.shape)
+original_dy_dx = list((_.detach().clone() for _ in dy_dx))  # 对原始梯度复制
 
-                    grad_count += gx.nelement()
-                
+# generate dummy data and label
+dummy_data = torch.randn(gt_data.size()).to(device).requires_grad_(True)
+dummy_label = torch.randn(gt_onehot_label.size()).to(device).requires_grad_(True)
 
-                    #if count == 9:
-                    #    break
-                    #count=count+1
-                # grad_diff = grad_diff / grad_count * 1000
-                
-                #grad_diff += ((original_pred[item]-pred)**2).sum()
-               
-                
-                
-                
-                grad_diff.backward()
-                #print (count)
+plt.imshow(To_image(dummy_data[0].cpu()))
+#plt.imshow(tp(gt_data[imidx].cpu()), cmap='gray')   #灰度图像专用
+optimizer = torch.optim.LBFGS([dummy_data, dummy_label])
 
-                #print (dummy_dy_dx)
-                #print (original_dy_dx)
+history = []
+for iters in range(300):
+    def closure():
+        optimizer.zero_grad()  # 梯度清零
+
+        dummy_pred = net(dummy_data)
+        dummy_onehot_label = F.softmax(dummy_label, dim=-1)
+        dummy_loss = criterion(dummy_pred, dummy_onehot_label)
+        dummy_dy_dx = torch.autograd.grad(dummy_loss, net.parameters(), create_graph=True)  # faked数据得到的梯度
+
+        grad_diff = 0
+        for gx, gy in zip(dummy_dy_dx, original_dy_dx):
+            grad_diff += ((gx - gy) ** 2).sum()  # 计算fake梯度与真实梯度的均方损失
+        grad_diff.backward()  # 对损失进行反向传播    优化器的目标是fake_data, fake_label
+
+        return grad_diff
 
 
-                return grad_diff
+    optimizer.step(closure)
+    if iters % 10 == 0:
+        current_loss = closure()
+        print(iters, "%.4f" % current_loss.item())
+        history.append(To_image(dummy_data[0].cpu()))
 
-
-
-            optimizer.step(closure)
-            if iters % 5 == 0: 
-                current_loss = closure()
-                #if iters == 0: 
-                print ("%.8f" % current_loss.item())
-                #print(iters, "%.8f" % current_loss.item())
-            history.append(tt(dummy_data[0].cpu()))
-
-        
-        
-        #plt.figure(figsize=(18, 12))
-        #for i in range(60):
-        #  plt.subplot(6, 10, i + 1)
-        #  plt.imshow(history[i * 5])
-        #  plt.title("iter=%d" % (i * 5))
-        #  plt.axis('off')
-        
-        plt.figure(figsize=(12, 1.5))
-        #iter_idx = [0,20,40,60,80,100,120,140,160,180]
-        plt.figure(figsize=(6.5, 1.2))
-        #iter_idx = [0,1000,2000,3000,4000,5000]
-        iter_idx = [0,5,10,20,50,100]
-        
-
-        for i in range(6):
-          plt.subplot(1, 6, i + 1)
-          plt.imshow(history[iter_idx[i]])
-          plt.title("iter=%d" % (iter_idx[i]))
-          plt.axis('off')
-            
-        #np.savetxt('ssim_random2',percept_dis,fmt="%4f")
-        #np.savetxt('mse_random2',recover_dis,fmt="%4f")
-        
-        #print("Dummy label is %d." % torch.argmax(dummy_label, dim=-1).item())
-        plt.savefig("./attack_image/index_%s_rand_%s_label_%s"%(item,rd, label_pred.item()))
-        #plt.clf()
-       
-    duration = time.time()-start
-    #print ("Running time is %.4f." %(duration/10.0) )
-    print (duration/10.0 )
+plt.figure(figsize=(12, 8))
+for i in range(30):
+    plt.subplot(3, 10, i + 1)
+    plt.imshow(history[i])
+    #plt.imshow(history[i], cmap='gray')#灰度图像
+    plt.title("iter=%d" % (i * 10))
+    plt.axis('off')
+plt.savefig("./attack_image/attack_result.png")
+plt.show()
