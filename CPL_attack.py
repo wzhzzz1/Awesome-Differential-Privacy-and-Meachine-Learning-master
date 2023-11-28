@@ -38,6 +38,7 @@ def deep_leakage_from_gradients(model, origin_grad):
     return dummy_data, dummy_label
 '''
 tt = transforms.ToPILImage()
+device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 #print (ssim(0.43*torch.unsqueeze(gt_data[0],dim=0),torch.unsqueeze(gt_data[0],dim=0),data_range=0).item())  #计算图像相似度，值在0到1之间，越接近1代表越相似
 #print (torch.dist(0.6*torch.unsqueeze(gt_data[0],dim=0),torch.unsqueeze(gt_data[0],dim=0),2).item())  #计算图像距离
 criterion = nn.CrossEntropyLoss()
