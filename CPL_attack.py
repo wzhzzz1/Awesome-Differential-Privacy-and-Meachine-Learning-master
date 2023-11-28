@@ -59,7 +59,7 @@ plt.axis('off')
 plt.savefig("./attack_image/sample.png")
 plt.clf()
 
-net = mnist_fully_connected().to(device)
+net = mnist_fully_connected(10).to(device)
 
 torch.manual_seed(1234)
 
