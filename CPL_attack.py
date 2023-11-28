@@ -73,6 +73,16 @@ dy_dx = torch.autograd.grad(y, net.parameters())  # 获取对参数W的梯度
 
 original_dy_dx = list((_.detach().clone() for _ in dy_dx))  # 对原始梯度复制
 
+
+noise_std = 0.1
+noise_mean = 0.0
+# 生成噪音张量，与 original_dy_dx 中的每个张量相同形状
+noises = [torch.randn_like(grad) * noise_std + noise_mean for grad in original_dy_dx]
+# 将噪音添加到 original_dy_dx 中的每个张量（并行操作）
+noisy_dy_dx = [grad + noise for grad, noise in zip(original_dy_dx, noises)]
+original_dy_dx = noisy_dy_dx
+
+
 # generate dummy data and label
 #dummy_data = torch.randn(gt_data.size()).to(device).requires_grad_(True)
 
@@ -115,7 +125,7 @@ for i in range(30):
     plt.subplot(3, 10, i + 1)
     plt.imshow(history[i])
     #plt.imshow(history[i], cmap='gray')#灰度图像
-    plt.title("iter=%d" % (i * 5))
+    plt.title("iter=%d" % (i * 10))
     plt.axis('off')
 plt.savefig("./attack_image/attack_result.png")
 plt.show()
