@@ -1,3 +1,4 @@
+%matplotlib inline
 import time
  
 from pytorch_msssim import ssim
