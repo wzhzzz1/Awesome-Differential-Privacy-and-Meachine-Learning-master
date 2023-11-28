@@ -63,7 +63,7 @@ net = LeNet().to(device)
 
 torch.manual_seed(1234)
 
-net.apply(weights_init)
+#net.apply(weights_init)
 criterion = cross_entropy_for_onehot  # 调用损失函数
 
 # compute original gradient 
@@ -74,12 +74,8 @@ dy_dx = torch.autograd.grad(y, net.parameters())  # 获取对参数W的梯度
 original_dy_dx = list((_.detach().clone() for _ in dy_dx))  # 对原始梯度复制
 
 # generate dummy data and label
-#dummy_data = torch.randn(gt_data.size()).to(device).requires_grad_(True)
-aaa = torch.rand([3,8,8])
-bbb = torch.cat((aaa,aaa),dim=1)
-ccc = torch.cat((bbb,bbb),dim=1)
-ddd = torch.cat((ccc,ccc),dim=2)
-eee = torch.cat((ddd,ddd),dim=2)
+dummy_data = torch.randn(gt_data.size()).to(device).requires_grad_(True)
+
 dummy_data = torch.unsqueeze(eee,dim=0).to(device).requires_grad_(True)
 dummy_label = torch.randn(gt_onehot_label.size()).to(device).requires_grad_(True)
 

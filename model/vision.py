@@ -8,9 +8,9 @@ from torchvision import models, datasets, transforms
 
 def weights_init(m):
     if hasattr(m, "weight"):
-        m.weight.data.uniform_(-0.1, 0.1)
+        m.weight.data.uniform_(-0.5, 0.5)
     if hasattr(m, "bias"):
-        m.bias.data.uniform_(-0.1, 0.1)
+        m.bias.data.uniform_(-0.5, 0.5)
         
 class LeNet(nn.Module):
     def __init__(self):
