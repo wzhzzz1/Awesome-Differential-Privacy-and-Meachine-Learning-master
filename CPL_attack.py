@@ -76,14 +76,10 @@ original_dy_dx = list((_.detach().clone() for _ in dy_dx))  # 对原始梯度复
 # generate dummy data and label
 #dummy_data = torch.randn(gt_data.size()).to(device).requires_grad_(True)
 
-aaa = torch.rand([3,4,4])
-bbb = torch.cat((aaa,aaa),dim=1)
-ccc = torch.cat((bbb,bbb),dim=1)
-ddd = torch.cat((ccc,ccc),dim=1)
-eee = torch.cat((ddd,ddd),dim=2)
-fff = torch.cat((eee,eee),dim=2)
-ggg = torch.cat((fff,fff),dim=2)
-dummy_data = torch.unsqueeze(ggg,dim=0).to(device).requires_grad_(True)
+pat_1 = torch.rand([3,16,16])
+pat_2 = torch.cat((pat_1,pat_1),dim=1)
+pat_4 = torch.cat((pat_2,pat_2),dim=2)
+dummy_data = torch.unsqueeze(pat_4,dim=0).to(device).requires_grad_(True)
 dummy_label = torch.randn(gt_onehot_label.size()).to(device).requires_grad_(True)
 
 plt.imshow(To_image(dummy_data[0].cpu()))
