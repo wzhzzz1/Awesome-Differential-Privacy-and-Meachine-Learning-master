@@ -15,8 +15,18 @@ from torchvision import models, datasets, transforms
 from utils import label_to_onehot, cross_entropy_for_onehot  # 将标签onehot化   并使用onehot形式的交叉熵损失函数
 from models.vision import LeNet, ResNet18
 from model.modelUtil import mnist_fully_connected, mnist_fully_connected_IN, mnist_fully_connected_IN1
+
+def label_to_onehot(target, num_classes=100):
+    target = torch.unsqueeze(target, 1)
+    onehot_target = torch.zeros(target.size(0), num_classes, device=target.device)
+    onehot_target.scatter_(1, target, 1)
+    return onehot_target
+
+def cross_entropy_for_onehot(pred, target):
+    return torch.mean(torch.sum(- target * F.log_softmax(pred, dim=-1), 1))
+
 parser = argparse.ArgumentParser(description='Deep Leakage from Gradients.')
-parser.add_argument('--index', type=int, default="45",
+parser.add_argument('--index', type=int, default="5",
                     help='the index for leaking images on CIFAR.')
 parser.add_argument('--image', type=str, default="",
                     help='the path to customized image.')
@@ -27,7 +37,7 @@ if torch.cuda.is_available():
     device = "cuda"
 print("Running on %s" % device)
 
-data_cifar = datasets.CIFAR100("/.torch", download=True)
+data_cifar = datasets.MNIST("../data", download=True)
 To_tensor = transforms.ToTensor()
 To_image = transforms.ToPILImage()
 
