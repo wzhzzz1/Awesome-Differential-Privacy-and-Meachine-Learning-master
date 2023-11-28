@@ -116,7 +116,7 @@ for i in range(30):
     plt.subplot(3, 10, i + 1)
     plt.imshow(history[i])
     #plt.imshow(history[i], cmap='gray')#灰度图像
-    plt.title("iter=%d" % (i * 10))
+    plt.title("iter=%d" % (i * 5))
     plt.axis('off')
 plt.savefig("./attack_image/attack_result.png")
 plt.show()
