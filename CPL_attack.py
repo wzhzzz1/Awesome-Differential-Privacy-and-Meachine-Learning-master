@@ -63,7 +63,7 @@ net = mnist_fully_connected(10).to(device)
 
 torch.manual_seed(1234)
 
-#net.apply(weights_init)
+net.apply(weights_init)
 criterion = cross_entropy_for_onehot  # 调用损失函数
 
 # compute original gradient 
@@ -92,8 +92,8 @@ pat_4 = torch.cat((pat_2,pat_2),dim=2)
 dummy_data = torch.unsqueeze(pat_4,dim=0).to(device).requires_grad_(True)
 dummy_label = torch.randn(gt_onehot_label.size()).to(device).requires_grad_(True)
 
-plt.imshow(To_image(dummy_data[0].cpu()))
-#plt.imshow(tp(gt_data[imidx].cpu()), cmap='gray')   #灰度图像专用
+#plt.imshow(To_image(dummy_data[0].cpu()))
+plt.imshow(tp(gt_data[imidx].cpu()), cmap='gray')   #灰度图像专用
 optimizer = torch.optim.LBFGS([dummy_data, dummy_label])
 
 history = []
@@ -123,8 +123,8 @@ for iters in range(300):
 plt.figure(figsize=(12, 8))
 for i in range(30):
     plt.subplot(3, 10, i + 1)
-    plt.imshow(history[i])
-    #plt.imshow(history[i], cmap='gray')#灰度图像
+    #plt.imshow(history[i])
+    plt.imshow(history[i], cmap='gray')#灰度图像
     plt.title("iter=%d" % (i * 10))
     plt.axis('off')
 plt.savefig("./attack_image/attack_result.png")
