@@ -95,7 +95,7 @@ dummy_label = torch.randn(gt_onehot_label.size()).to(device).requires_grad_(True
 plt.imshow(To_image(dummy_data[0].cpu()))
 #plt.imshow(tp(gt_data[imidx].cpu()), cmap='gray')   #灰度图像专用
 optimizer = torch.optim.LBFGS([dummy_data, dummy_label])
-
+#111
 history = []
 for iters in range(300):
     def closure():
