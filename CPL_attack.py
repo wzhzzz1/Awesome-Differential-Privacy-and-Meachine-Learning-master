@@ -72,8 +72,7 @@ y = criterion(pred, gt_onehot_label)
 dy_dx = torch.autograd.grad(y, net.parameters())  # 获取对参数W的梯度
 
 original_dy_dx = list((_.detach().clone() for _ in dy_dx))  # 对原始梯度复制
-original_dy_dx_shapes = [param.shape for param in original_dy_dx]
-print(original_dy_dx_shapes)
+
 '''
 noise_std = 0.1
 noise_mean = 0.0
