@@ -35,7 +35,7 @@ if torch.cuda.is_available():
     device = "cuda"
 print("Running on %s" % device)
 
-data_cifar = datasets.MNIST("../data", download=True)
+data_cifar = datasets.CIFAR10("../data", download=True)
 To_tensor = transforms.ToTensor()
 To_image = transforms.ToPILImage()
 
@@ -58,35 +58,36 @@ plt.imshow(To_image(gt_data[0].cpu()),cmap='gray')
 plt.axis('off')
 plt.savefig("./attack_image/sample.png")
 plt.clf()
-
-net = mnist_fully_connected(10).to(device)
+#with open(f"./attack_image/attack_result_cifai10_lu.pkl", 'wb') as file:
+#    pickle.dump(To_image(gt_data[0].cpu()), file)
+net = LeNet().to(device)
 
 torch.manual_seed(1234)
 
 #net.apply(weights_init)
 criterion = cross_entropy_for_onehot  # 调用损失函数
 
-# compute original gradient 
+# compute original gradient
 pred = net(gt_data)
 y = criterion(pred, gt_onehot_label)
 dy_dx = torch.autograd.grad(y, net.parameters())  # 获取对参数W的梯度
 
 original_dy_dx = list((_.detach().clone() for _ in dy_dx))  # 对原始梯度复制
 
-'''
-noise_std = 0.1
+
+noise_std = 0.00005
 noise_mean = 0.0
 # 生成噪音张量，与 original_dy_dx 中的每个张量相同形状
 noises = [torch.randn_like(grad) * noise_std + noise_mean for grad in original_dy_dx]
 # 将噪音添加到 original_dy_dx 中的每个张量（并行操作）
 noisy_dy_dx = [grad + noise for grad, noise in zip(original_dy_dx, noises)]
 original_dy_dx = noisy_dy_dx
-'''
+
 
 # generate dummy data and label
 #dummy_data = torch.randn(gt_data.size()).to(device).requires_grad_(True)
 
-pat_1 = torch.rand([1,14,14])
+pat_1 = torch.rand([3,16,16])
 pat_2 = torch.cat((pat_1,pat_1),dim=1)
 pat_4 = torch.cat((pat_2,pat_2),dim=2)
 dummy_data = torch.unsqueeze(pat_4,dim=0).to(device).requires_grad_(True)
@@ -131,5 +132,6 @@ plt.savefig("./attack_image/attack_result.png")
 plt.show()
 
 for i in range(len(history)):
-    with open(f"./attack_image/attack_result_eps20_{i}.pkl", 'wb') as file:
+    with open(f"./attack_image/attack_result_eps8_cifar10_{i}.pkl", 'wb') as file:
         pickle.dump(history[i], file)
+
