@@ -349,8 +349,7 @@ class ResNet_IN(nn.Module):
 class ResNet_IN1(nn.Module):
     def __init__(self, ResidualBlock, num_classes=10):
         super(ResNet_IN1, self).__init__()
-        self.norm = InputNorm1(3, 32)
-        self.bn = OutputNorm1(1, 10)
+
         self.inchannel = 64
         self.conv1 = nn.Sequential(
             nn.Conv2d(3, 64, kernel_size=3, stride=1, padding=1, bias=False),
@@ -362,7 +361,8 @@ class ResNet_IN1(nn.Module):
         self.layer3 = self.make_layer(ResidualBlock, 256, 2, stride=2)
         self.layer4 = self.make_layer(ResidualBlock, 512, 2, stride=2)
         self.fc = nn.Linear(512, num_classes)
-
+        self.norm = InputNorm1(3, 32)
+        self.bn = OutputNorm1(1, 10)
     def make_layer(self, block, channels, num_blocks, stride):
         strides = [stride] + [1] * (num_blocks - 1)   #strides=[1,1]
         layers = []
