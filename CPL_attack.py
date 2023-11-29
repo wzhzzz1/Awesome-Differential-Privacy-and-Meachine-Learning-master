@@ -131,5 +131,5 @@ plt.savefig("./attack_image/attack_result.png")
 plt.show()
 
 for i in range(len(history)):
-    img = Image.fromarray(history[i])
-    img.save(f"./attack_image/attack_result_eps_20_{i}.png")
+    with open(f"./attack_image/attack_result_eps20_{i}.pkl", 'wb') as file:
+        pickle.dump(history[i], file)
