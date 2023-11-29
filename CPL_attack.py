@@ -132,4 +132,4 @@ plt.show()
 
 for i in range(len(history)):
     img = Image.fromarray(history[i])
-    img.save(f"./attack_image/attack_result_{i}.png")
+    img.save(f"./attack_image/attack_result_eps_20_{i}.png")
