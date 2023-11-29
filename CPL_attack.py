@@ -129,3 +129,7 @@ for i in range(30):
     plt.axis('off')
 plt.savefig("./attack_image/attack_result.png")
 plt.show()
+
+for i in range(len(history)):
+    img = Image.fromarray(history[i])
+    img.save(f"./attack_image/attack_result_{i}.png")
