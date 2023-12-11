@@ -173,7 +173,7 @@ if __name__ == "__main__":
     args = parse_arguments()
     train_data, test_data = get_data(args.data, augment=False)
     # print(train_data.data)
-
+    #
     # print(train_data.__dict__)
     batch_size = args.batchsize  # 小批量
     learning_rate = args.lr  # 学习率
@@ -191,3 +191,4 @@ if __name__ == "__main__":
     usedp = args.usedp
     fed_avg(train_data, test_data, number_of_clients, learning_rate, momentum, numEpoch, iters, alpha, seed,
             q_for_batch_size, per, ptype, usedp, epsilon)
+
