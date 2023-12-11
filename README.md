@@ -9,8 +9,3 @@ bash setup.sh
 
 bash fed_avg.sh
 
-#Usage2
-
-hire an autodl server 
-
-bash fed_avg.sh
