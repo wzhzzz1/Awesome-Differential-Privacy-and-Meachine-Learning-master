@@ -1,3 +1,4 @@
+#https://www.secretflow.org.cn/docs/heu/latest/zh-Hans/getting_started/installation#id3
 from heu import numpy as hnp
 from heu import phe
 
