@@ -11,6 +11,6 @@ bash fed_avg.sh
 
 #Usage2
 
-use autodl server
+hire an autodl server 
 
 bash fed_avg.sh
