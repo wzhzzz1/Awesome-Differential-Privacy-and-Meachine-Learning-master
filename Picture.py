@@ -1,5 +1,5 @@
 '''
-#论文图7
+#论文图9
 
 import matplotlib.pyplot as plt
 
@@ -62,9 +62,9 @@ y4_3 = [0.189	,0.138	,0.098	,0.078]
 fig, axs = plt.subplots(nrows=1, ncols=4, figsize=(20, 5),dpi=300)
 
 # 第一个子图
-axs[0].plot(x1_1, y1_1, marker='s', label='x&x(Fedavg)',color='#B22222', markersize=3,linestyle='--',linewidth=0.75)
-axs[0].plot(x1_2, y1_2, marker='*', label='Liner&x(Privatefl)',color='c', markersize=3,linestyle='-.',linewidth=0.75)
-axs[0].plot(x1_3, y1_3, marker='+', label='Liner&Liner',color='black', markersize=3,linestyle='-',linewidth=0.75)
+axs[0].plot(x1_1, y1_1, marker='s', label='Fedavg',color='#B22222', markersize=3,linestyle='--',linewidth=0.75)
+axs[0].plot(x1_2, y1_2, marker='*', label='Privatefl',color='c', markersize=3,linestyle='-.',linewidth=0.75)
+axs[0].plot(x1_3, y1_3, marker='+', label='PD-LDPFL',color='black', markersize=3,linestyle='-',linewidth=0.75)
 
 
 axs[0].legend(loc='upper right')
@@ -75,9 +75,9 @@ axs[0].set_ylabel('Heterogeneity(sum of loss)')
 
 
 # 第二个子图
-axs[1].plot(x2_1, y2_1, marker='s', label='x&x(Fedavg)',color='#B22222', markersize=3,linestyle='--',linewidth=0.75)
-axs[1].plot(x2_2, y2_2, marker='*', label='Liner&x(Privatefl)',color='c', markersize=3,linestyle='-.',linewidth=0.75)
-axs[1].plot(x2_3, y2_3, marker='+', label='Liner&Liner',color='black', markersize=3,linestyle='-',linewidth=0.75)
+axs[1].plot(x2_1, y2_1, marker='s', label='Fedavg',color='#B22222', markersize=3,linestyle='--',linewidth=0.75)
+axs[1].plot(x2_2, y2_2, marker='*', label='Privatefl',color='c', markersize=3,linestyle='-.',linewidth=0.75)
+axs[1].plot(x2_3, y2_3, marker='+', label='PD-LDPFL',color='black', markersize=3,linestyle='-',linewidth=0.75)
 
 
 axs[1].legend(loc='upper right')
@@ -87,9 +87,9 @@ axs[1].set_ylabel('Heterogeneity(sum of loss)')
 
 
 # 第三个子图
-axs[2].plot(x3_1, y3_1, marker='s', label='x&x(Fedavg)',color='#B22222', markersize=3,linestyle='--',linewidth=0.75)
-axs[2].plot(x3_2, y3_2, marker='*', label='Liner&x(Privatefl)',color='c', markersize=3,linestyle='-.',linewidth=0.75)
-axs[2].plot(x3_3, y3_3, marker='+', label='Liner&Liner',color='black', markersize=3,linestyle='-',linewidth=0.75)
+axs[2].plot(x3_1, y3_1, marker='s', label='Fedavg',color='#B22222', markersize=3,linestyle='--',linewidth=0.75)
+axs[2].plot(x3_2, y3_2, marker='*', label='Privatefl',color='c', markersize=3,linestyle='-.',linewidth=0.75)
+axs[2].plot(x3_3, y3_3, marker='+', label='PD-LDPFL',color='black', markersize=3,linestyle='-',linewidth=0.75)
 
 
 axs[2].legend(loc='upper right')
@@ -99,9 +99,9 @@ axs[2].set_ylabel('Heterogeneity(sum of loss)')
 
 
 # 第四个子图
-axs[3].plot(x4_1, y4_1, marker='s', label='x&x(Fedavg)',color='#B22222', markersize=3,linestyle='--',linewidth=0.75)
-axs[3].plot(x4_2, y4_2, marker='*', label='Liner&x(Privatefl)',color='c', markersize=3,linestyle='-.',linewidth=0.75)
-axs[3].plot(x4_3, y4_3, marker='+', label='Liner&Liner',color='black', markersize=3,linestyle='-',linewidth=0.75)
+axs[3].plot(x4_1, y4_1, marker='s', label='Fedavg',color='#B22222', markersize=3,linestyle='--',linewidth=0.75)
+axs[3].plot(x4_2, y4_2, marker='*', label='Privatefl',color='c', markersize=3,linestyle='-.',linewidth=0.75)
+axs[3].plot(x4_3, y4_3, marker='+', label='PD-LDPFL',color='black', markersize=3,linestyle='-',linewidth=0.75)
 
 
 axs[3].legend(loc='upper right')
@@ -112,10 +112,10 @@ axs[3].set_ylabel('Heterogeneity(sum of loss)')
 
 
 axs[0].set_yticks(range(1, 4, 1))  # 设置 y 轴刻度为 10 的倍数，范围为 10 到 100
-axs[0].set_ylim(1, 3)  # 设置 y 轴范围从 10 到 100
+
 # 调整布局
 axs[1].set_yticks(range(1, 4, 1))  # 设置 y 轴刻度为 10 的倍数，范围为 10 到 100
-axs[1].set_ylim(1, 3)  # 设置 y 轴范围从 10 到 100
+
 plt.tight_layout()
 
 
@@ -123,16 +123,20 @@ plt.tight_layout()
 
 # 显示图形
 fig.text(0.134, 0.009, r'(a) $\beta$ = 0.5', ha='center')
-fig.text(0.385, 0.009, r'(a) $\beta$ = 1', ha='center')
-fig.text(0.635, 0.009, r'(a) $\beta$ = 5', ha='center')
-fig.text(0.885, 0.009, r'(a) $\beta$ = 100', ha='center')
+fig.text(0.385, 0.009, r'(b) $\beta$ = 1', ha='center')
+fig.text(0.635, 0.009, r'(c) $\beta$ = 5', ha='center')
+fig.text(0.885, 0.009, r'(d) $\beta$ = 100', ha='center')
 plt.subplots_adjust(bottom=0.128)
 plt.show()
 fig.savefig('my_plot.png', dpi=1200)
 '''
 
 
-#论文图6
+
+
+
+'''
+#论文图8
 
 import matplotlib.pyplot as plt
 
@@ -266,7 +270,7 @@ fig, axs = plt.subplots(nrows=1, ncols=4, figsize=(20, 5),dpi=300)
 axs[0].plot(x1_1, y1_1, marker='s', label='x&x(Fedavg)',color='#B22222', markersize=3,linestyle='--',linewidth=0.75)
 axs[0].plot(x1_2, y1_2, marker='*', label='Liner&x(Privatefl)',color='c', markersize=3,linestyle='-.',linewidth=0.75)
 axs[0].plot(x1_3, y1_3, marker='+', label='x&Liner',color='black', markersize=3,linestyle=':',linewidth=0.75)
-axs[0].plot(x1_4, y1_4, marker='>', label='Liner&Liner(PDPFL)',color='cornflowerblue', markersize=3,linestyle='-',linewidth=0.75)
+axs[0].plot(x1_4, y1_4, marker='>', label='Liner&Liner(PD-LDPFL)',color='cornflowerblue', markersize=3,linestyle='-',linewidth=0.75)
 
 axs[0].legend(loc='lower right')
 axs[0].grid(True,linestyle='--')
@@ -291,7 +295,7 @@ axs[0].annotate(
 axs[1].plot(x2_1, y2_1, marker='s', label='x&x(Fedavg)',color='#B22222', markersize=3,linestyle='--',linewidth=0.75)
 axs[1].plot(x2_2, y2_2, marker='*', label='Liner&x(Privatefl)',color='c', markersize=3,linestyle='-.',linewidth=0.75)
 axs[1].plot(x2_3, y2_3, marker='+', label='x&Liner',color='black', markersize=3,linestyle=':',linewidth=0.75)
-axs[1].plot(x2_4, y2_4, marker='>', label='Liner&Liner(PDPFL)',color='cornflowerblue', markersize=3,linestyle='-',linewidth=0.75)
+axs[1].plot(x2_4, y2_4, marker='>', label='Liner&Liner(PD-LDPFL)',color='cornflowerblue', markersize=3,linestyle='-',linewidth=0.75)
 
 axs[1].legend(loc='lower right')
 axs[1].grid(True,linestyle='--')
@@ -315,7 +319,7 @@ axs[1].annotate(
 axs[2].plot(x3_1, y3_1, marker='s', label='x&x(Fedavg)',color='#B22222', markersize=3,linestyle='--',linewidth=0.75)
 axs[2].plot(x3_2, y3_2, marker='*', label='Liner&x(Privatefl)',color='c', markersize=3,linestyle='-.',linewidth=0.75)
 axs[2].plot(x3_3, y3_3, marker='+', label='x&Liner',color='black', markersize=3,linestyle=':',linewidth=0.75)
-axs[2].plot(x3_4, y3_4, marker='>', label='Liner&Liner(PDPFL)',color='cornflowerblue', markersize=3,linestyle='--',linewidth=0.75)
+axs[2].plot(x3_4, y3_4, marker='>', label='Liner&Liner(PD-LDPFL)',color='cornflowerblue', markersize=3,linestyle='--',linewidth=0.75)
 
 axs[2].legend(loc='lower right')
 axs[2].grid(True,linestyle='--')
@@ -339,7 +343,7 @@ axs[2].annotate(
 axs[3].plot(x4_1, y4_1, marker='s', label='x&x(Fedavg)',color='#B22222', markersize=3,linestyle='--',linewidth=0.75)
 axs[3].plot(x4_2, y4_2, marker='*', label='Liner&x(Privatefl)',color='c', markersize=3,linestyle='-.',linewidth=0.75)
 axs[3].plot(x4_3, y4_3, marker='+', label='x&Liner',color='black', markersize=3,linestyle=':',linewidth=0.75)
-axs[3].plot(x4_4, y4_4, marker='>', label='Liner&Liner(PDPFL)',color='cornflowerblue', markersize=3,linestyle='--',linewidth=0.75)
+axs[3].plot(x4_4, y4_4, marker='>', label='Liner&Liner(PD-LDPFL)',color='cornflowerblue', markersize=3,linestyle='--',linewidth=0.75)
 
 axs[3].legend(loc='lower right')
 axs[3].grid(True,linestyle='--')
@@ -374,15 +378,15 @@ fig.text(0.638, 0.009, '(c) FMNIST dataset', ha='center')
 fig.text(0.888, 0.009, '(d) FMNIST dataset', ha='center')
 plt.subplots_adjust(bottom=0.128)
 plt.show()
-fig.savefig('my_plot.png', dpi=1200)
-
-
-
-
-
-
-#论文图5
+fig.savefig('my_plot.png', dpi=300)
 '''
+
+
+
+
+'''
+#论文图7
+
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -430,9 +434,9 @@ plt.show()
 '''
 
 
-
-#论文图4
 '''
+#论文图6
+
 import matplotlib.pyplot as plt
 
 # 第一部分数据
@@ -478,14 +482,14 @@ plt.show()
 
 
 
-
-#论文图3
 '''
+#论文图3
+
 import matplotlib.pyplot as plt
 
 # 第一批数据
 x1_part1 = [4, 6, 8, 10]
-y1_part1 = [0.044, 0.028, 0.0195, 0.0162]
+y1_part1 = [0.044, 0.028, 0.0195, 0.0169]
 
 x1_part2 = [4, 6, 8, 10]
 y1_part2 = [0.0155, 0.0155, 0.0155, 0.0155]
@@ -497,11 +501,12 @@ y2_part1 = [0.294, 0.177, 0.148, 0.126]
 x2_part2 = [4, 6, 8, 10]
 y2_part2 = [0.12, 0.12, 0.12, 0.12]
 
-fig, axs = plt.subplots(nrows=1, ncols=2, figsize=(10, 5))
+fig, axs = plt.subplots(nrows=1, ncols=2, figsize=(10, 5),dpi=300)
 
 # 第一个子图
 axs[0].plot(x1_part1, y1_part1, marker='s', label='LDP',color='#B22222', markersize=8,linestyle='--',linewidth=2)
 axs[0].plot(x1_part2, y1_part2, marker='*', label='Noise-Free',color='black', markersize=8,linewidth=2)
+
 
 axs[0].legend()
 axs[0].grid(True,linestyle='--')
@@ -531,9 +536,9 @@ fig.text(0.782, 0.009, '(b)NO-IID', ha='center')
 plt.subplots_adjust(bottom=0.13)
 plt.show()
 fig.savefig('my_plot.png', dpi=300)
-
-
 '''
+
+
 
 
 
@@ -560,7 +565,7 @@ fig.savefig('my_plot.png', dpi=300)
 
 
 #论文图2
-'''
+
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -634,6 +639,6 @@ itle_text = ax2.text2D(0.5, -0.1, '(b) NO-IID', transform=ax2.transAxes, ha='cen
 plt.tight_layout()
 plt.subplots_adjust(wspace=0.2, right=0.93,top=1.25)
 plt.show()
-'''
+
 
 
