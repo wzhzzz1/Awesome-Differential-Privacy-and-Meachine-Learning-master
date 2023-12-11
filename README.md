@@ -6,3 +6,4 @@ environment python3.8
 #Usage
 
 bash fed_avg.sh
+

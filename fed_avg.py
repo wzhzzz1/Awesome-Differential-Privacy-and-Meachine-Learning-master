@@ -38,9 +38,9 @@ def parse_arguments():
     parser.add_argument('--eps', type=float, default=0,
                         help='隐私预算')
     parser.add_argument('--personal', type=int, default=0,
-                        help='是否用个性化转换')
+                        help='是否用个性化模型')
     parser.add_argument('--ptype', type=str, default='no',
-                        help='是否用个性化转换')
+                        help='是否用双个性化模型')
     parser.add_argument('--usedp', type=int, default=0,
                         help='是否用dp')
     args = parser.parse_args()
@@ -72,7 +72,7 @@ def fed_avg(train_data, test_data, number_of_clients, learning_rate, momentum, n
             clients_model_list, clients_optimizer_list, clients_criterion_list = create_model_optimizer_criterion_dict(
                 number_of_clients, learning_rate, mnist_fully_connected_IN(10))
             #clients_model_list, clients_optimizer_list, clients_criterion_list = create_model_optimizer_criterion_dict(number_of_clients, learning_rate, ResNet18_IN())
-        if ptype == 'unliner':
+        if ptype == 'double':
             clients_model_list, clients_optimizer_list, clients_criterion_list = create_model_optimizer_criterion_dict(
                 number_of_clients, learning_rate, mnist_fully_connected_IN1(10))
             # clients_model_list, clients_optimizer_list, clients_criterion_list = create_model_optimizer_criterion_dict(number_of_clients, learning_rate, ResNet18_IN1())
