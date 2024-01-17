@@ -1,4 +1,5 @@
 import sys
+
 sys.path.append('/home/wangzihang/FL-DP/')
 from FL_and_DP.fl_utils.center_average_model_with_weights import set_averaged_weights_as_main_model_weights, \
     set_averaged_weights_as_main_model_weights_fully_averaged
@@ -9,7 +10,8 @@ from data.fed_data_distribution.dirichlet_nonIID_data import fed_dataset_NonIID_
 from FL_and_DP.fl_utils.optimizier_and_model_distribution import create_model_optimizer_criterion_dict
 from data.fed_data_distribution.pathological_nonIID_data import pathological_split_noniid
 from data.get_data import get_data
-from model.modelUtil import mnist_fully_connected, mnist_fully_connected_IN, mnist_fully_connected_IN1,Cifar10CNN,Cifar10CNN_IN,Cifar10CNN_IN1,ResNet18,ResNet18_IN,ResNet18_IN1
+from model.modelUtil import mnist_fully_connected, mnist_fully_connected_IN, mnist_fully_connected_IN1, Cifar10CNN, \
+    Cifar10CNN_IN, Cifar10CNN_IN1, ResNet18, ResNet18_IN, ResNet18_IN1
 from train_and_validation.validation import validation
 import torch
 import matplotlib.pyplot as plt
@@ -49,8 +51,8 @@ def parse_arguments():
     return args
 
 
-def fed_avg(train_data, test_data, number_of_clients, learning_rate, model_kind, momentum, numEpoch, iters, alpha, seed, q, per,
-            ptype, usedp, epsilon):
+def fed_avg(train_data, test_data, number_of_clients, learning_rate, model_kind, momentum, numEpoch, iters, alpha, seed,
+            q, per, ptype, usedp, epsilon, use_cos_similarity):
     epoch_list = []
     acc_list = []
     # 客户端的样本分配
@@ -60,11 +62,11 @@ def fed_avg(train_data, test_data, number_of_clients, learning_rate, model_kind,
     # clients_data_list, weight_of_each_clients,batch_size_of_each_clients =pathological_split_noniid(train_data,number_of_clients,alpha,seed,q)
 
     # 初始化中心模型,本质上是用来接收客户端的模型并加权平均进行更新的一个变量
-    if model_kind =='DNN':
+    if model_kind == 'DNN':
         center_model = mnist_fully_connected(10)
-    elif model_kind =='Resnet18':
+    elif model_kind == 'Resnet18':
         center_model = ResNet18()
-    all_train_loss=[]
+    all_train_loss = []
     # 各个客户端的model,optimizer,criterion的分配
 
     if per == 0:
@@ -77,13 +79,15 @@ def fed_avg(train_data, test_data, number_of_clients, learning_rate, model_kind,
                 clients_model_list, clients_optimizer_list, clients_criterion_list = create_model_optimizer_criterion_dict(
                     number_of_clients, learning_rate, mnist_fully_connected_IN(10))
             elif model_kind == 'Resnet18':
-                clients_model_list, clients_optimizer_list, clients_criterion_list = create_model_optimizer_criterion_dict(number_of_clients, learning_rate, ResNet18_IN())
+                clients_model_list, clients_optimizer_list, clients_criterion_list = create_model_optimizer_criterion_dict(
+                    number_of_clients, learning_rate, ResNet18_IN())
         if ptype == 'double':
             if model_kind == 'DNN':
                 clients_model_list, clients_optimizer_list, clients_criterion_list = create_model_optimizer_criterion_dict(
                     number_of_clients, learning_rate, mnist_fully_connected_IN1(10))
             elif model_kind == 'Resnet18':
-                clients_model_list, clients_optimizer_list, clients_criterion_list = create_model_optimizer_criterion_dict(number_of_clients, learning_rate, ResNet18_IN1())
+                clients_model_list, clients_optimizer_list, clients_criterion_list = create_model_optimizer_criterion_dict(
+                    number_of_clients, learning_rate, ResNet18_IN1())
     test_dl = torch.utils.data.DataLoader(
         test_data, batch_size=256, shuffle=False)
 
@@ -96,18 +100,24 @@ def fed_avg(train_data, test_data, number_of_clients, learning_rate, model_kind,
         print("现在进行和中心方的第{:3.0f}轮联邦训练".format(i + 1))
 
         if usedp == 0:
-            train_loss = local_clients_train_process_without_dp_one_epoch(number_of_clients, clients_data_list, clients_model_list,
-                                                             clients_criterion_list, clients_optimizer_list, numEpoch,
-                                                             q)
+            train_loss = local_clients_train_process_without_dp_one_epoch(number_of_clients, clients_data_list,
+                                                                          clients_model_list,
+                                                                          clients_criterion_list,
+                                                                          clients_optimizer_list, numEpoch,
+                                                                          q)
             all_train_loss.append(train_loss)
         else:
-            train_loss = local_clients_train_process_one_epoch_with_ldp_PM(number_of_clients, clients_data_list, clients_model_list,
-                                                              clients_criterion_list, clients_optimizer_list, numEpoch,
-                                                              q, epsilon)
+            train_loss = local_clients_train_process_one_epoch_with_ldp_PM(number_of_clients, clients_data_list,
+                                                                           clients_model_list,
+                                                                           clients_criterion_list,
+                                                                           clients_optimizer_list, numEpoch,
+                                                                           q, epsilon)
             all_train_loss.append(train_loss)
-
-        main_model = set_averaged_weights_as_main_model_weights(center_model, clients_model_list,
+        if use_cos_similarity == 0:
+            main_model = set_averaged_weights_as_main_model_weights(center_model, clients_model_list,
                                                                 weight_of_each_clients)
+        else:
+            pass
         '''
         if i==iters-1:
             print('train finish')
@@ -197,7 +207,6 @@ if __name__ == "__main__":
     per = args.personal
     ptype = args.ptype
     usedp = args.usedp
-    use_cos_similarity=args.use_client_selection_by_similarity
+    use_cos_similarity = args.use_client_selection_by_similarity
     fed_avg(train_data, test_data, number_of_clients, learning_rate, model_kind, momentum, numEpoch, iters, alpha, seed,
-            q_for_batch_size, per, ptype, usedp, epsilon)
-
+            q_for_batch_size, per, ptype, usedp, epsilon, use_cos_similarity)
