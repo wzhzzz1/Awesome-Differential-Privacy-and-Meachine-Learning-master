@@ -58,7 +58,7 @@ def fed_avg(train_data, test_data, number_of_clients, learning_rate, momentum, m
                                                                                                          number_of_clients,
                                                                                                          alpha, seed, q)
     # clients_data_list, weight_of_each_clients,batch_size_of_each_clients =pathological_split_noniid(train_data,number_of_clients,alpha,seed,q)
-
+    print(model_kind)
     # 初始化中心模型,本质上是用来接收客户端的模型并加权平均进行更新的一个变量
     if model_kind =='DNN':
         center_model = mnist_fully_connected(10)
