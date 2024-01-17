@@ -43,6 +43,8 @@ def parse_arguments():
                         help='是否用双个性化模型')
     parser.add_argument('--usedp', type=int, default=0,
                         help='是否用dp')
+    parser.add_argument('--use_client_selection_by_similarity', type=int, default=0,
+                        help='是否用基于余弦相似度的客户端选择')
     args = parser.parse_args()
     return args
 
@@ -68,7 +70,7 @@ def fed_avg(train_data, test_data, number_of_clients, learning_rate, momentum, n
             number_of_clients, learning_rate, center_model)
 
     else:
-        if ptype == 'liner':
+        if ptype == 'single':
             clients_model_list, clients_optimizer_list, clients_criterion_list = create_model_optimizer_criterion_dict(
                 number_of_clients, learning_rate, mnist_fully_connected_IN(10))
             #clients_model_list, clients_optimizer_list, clients_criterion_list = create_model_optimizer_criterion_dict(number_of_clients, learning_rate, ResNet18_IN())
@@ -189,6 +191,7 @@ if __name__ == "__main__":
     per = args.personal
     ptype = args.ptype
     usedp = args.usedp
+    use_cos_similarity=args.use_client_selection_by_similarity
     fed_avg(train_data, test_data, number_of_clients, learning_rate, momentum, numEpoch, iters, alpha, seed,
             q_for_batch_size, per, ptype, usedp, epsilon)
 
