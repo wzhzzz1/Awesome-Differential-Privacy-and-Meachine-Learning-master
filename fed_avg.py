@@ -26,7 +26,7 @@ def parse_arguments():
     parser.add_argument('--batchsize', type=int, help='the number of class for this dataset', default=64)
     parser.add_argument('--epoch', type=int, default=1)
     parser.add_argument('--iters', type=int, default=100)
-
+    parser.add_argument('--model', type=str, default='DNN')
     parser.add_argument('--lr', type=float, default=1e-2,
                         help='learning rate')
     parser.add_argument('--alpha', type=float, default=0.5,
@@ -49,7 +49,7 @@ def parse_arguments():
     return args
 
 
-def fed_avg(train_data, test_data, number_of_clients, learning_rate, momentum, numEpoch, iters, alpha, seed, q, per,
+def fed_avg(train_data, test_data, number_of_clients, learning_rate, momentum, model_kind, numEpoch, iters, alpha, seed, q, per,
             ptype, usedp, epsilon):
     epoch_list = []
     acc_list = []
@@ -60,8 +60,10 @@ def fed_avg(train_data, test_data, number_of_clients, learning_rate, momentum, n
     # clients_data_list, weight_of_each_clients,batch_size_of_each_clients =pathological_split_noniid(train_data,number_of_clients,alpha,seed,q)
 
     # 初始化中心模型,本质上是用来接收客户端的模型并加权平均进行更新的一个变量
-    center_model = mnist_fully_connected(10)
-    #center_model = ResNet18()
+    if model_kind =='DNN':
+        center_model = mnist_fully_connected(10)
+    elif model_kind =='Resnet18':
+        center_model = ResNet18()
     all_train_loss=[]
     # 各个客户端的model,optimizer,criterion的分配
 
@@ -71,13 +73,17 @@ def fed_avg(train_data, test_data, number_of_clients, learning_rate, momentum, n
 
     else:
         if ptype == 'single':
-            clients_model_list, clients_optimizer_list, clients_criterion_list = create_model_optimizer_criterion_dict(
-                number_of_clients, learning_rate, mnist_fully_connected_IN(10))
-            #clients_model_list, clients_optimizer_list, clients_criterion_list = create_model_optimizer_criterion_dict(number_of_clients, learning_rate, ResNet18_IN())
+            if model_kind == 'DNN':
+                clients_model_list, clients_optimizer_list, clients_criterion_list = create_model_optimizer_criterion_dict(
+                    number_of_clients, learning_rate, mnist_fully_connected_IN(10))
+            elif model_kind == 'Resnet18':
+                clients_model_list, clients_optimizer_list, clients_criterion_list = create_model_optimizer_criterion_dict(number_of_clients, learning_rate, ResNet18_IN())
         if ptype == 'double':
-            clients_model_list, clients_optimizer_list, clients_criterion_list = create_model_optimizer_criterion_dict(
-                number_of_clients, learning_rate, mnist_fully_connected_IN1(10))
-            # clients_model_list, clients_optimizer_list, clients_criterion_list = create_model_optimizer_criterion_dict(number_of_clients, learning_rate, ResNet18_IN1())
+            if model_kind == 'DNN':
+                clients_model_list, clients_optimizer_list, clients_criterion_list = create_model_optimizer_criterion_dict(
+                    number_of_clients, learning_rate, mnist_fully_connected_IN1(10))
+            elif model_kind == 'Resnet18':
+                clients_model_list, clients_optimizer_list, clients_criterion_list = create_model_optimizer_criterion_dict(number_of_clients, learning_rate, ResNet18_IN1())
     test_dl = torch.utils.data.DataLoader(
         test_data, batch_size=256, shuffle=False)
 
@@ -187,11 +193,11 @@ if __name__ == "__main__":
     seed = args.seed  # 随机种子
     q_for_batch_size = args.sr  # 基于该数据采样率组建每个客户端的batchsize
     epsilon = args.eps
-
+    model_kind = args.model
     per = args.personal
     ptype = args.ptype
     usedp = args.usedp
     use_cos_similarity=args.use_client_selection_by_similarity
-    fed_avg(train_data, test_data, number_of_clients, learning_rate, momentum, numEpoch, iters, alpha, seed,
+    fed_avg(train_data, test_data, number_of_clients, learning_rate, model_kind, momentum, numEpoch, iters, alpha, seed,
             q_for_batch_size, per, ptype, usedp, epsilon)
 
