@@ -1,4 +1,6 @@
 import torch
+import torch
+import torch.nn.functional as F
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
 def set_averaged_weights_as_main_model_weights(center_model,clients_model_list,weight_of_each_clients):
@@ -28,6 +30,41 @@ def set_averaged_weights_as_main_model_weights(center_model,clients_model_list,w
 
     center_model.load_state_dict(global_parameters, strict=True)
     return center_model
+
+def set_averaged_weights_as_main_model_weights_by_cos_similarity(center_model,clients_model_list,weight_of_each_clients):
+    similarity_weight =[]
+    for i in range(len(clients_model_list)):
+        similarity_weight.append(F.cosine_similarity(center_model.state_dict().values, clients_model_list[i].state_dict().values(), dim=1))
+    print(similarity_weight)
+    sum_parameters = None  # 用来接所有边缘节点的模型的参数
+    global_parameters = {}
+    for key, var in center_model.state_dict().items():
+        global_parameters[key] = var.clone()
+
+    with torch.no_grad():
+
+        for i in range(len(clients_model_list)):
+
+            local_parameters = clients_model_list[i].state_dict()  # 先把第i个客户端的model取出来
+
+            if sum_parameters is None:  # 先初始化模型字典，主要是初始化key
+                sum_parameters = {}
+                for key, var in local_parameters.items():
+                    if 'norm' not in key and 'bn' not in key and 'downsample.1' not in key:
+                        sum_parameters[key] = weight_of_each_clients[i] * var.clone()
+
+            else:  # 然后做值的累加,这边直接加权了
+                for var in sum_parameters:
+                    sum_parameters[var] = sum_parameters[var] + weight_of_each_clients[i] * local_parameters[var].to(device)
+
+        for var in global_parameters:
+            global_parameters[var] = (sum_parameters[var])
+
+    center_model.load_state_dict(global_parameters, strict=True)
+    return center_model
+
+
+
 
 #简单的平均，不做加权
 def set_averaged_weights_as_main_model_weights_fully_averaged(center_model,clients_model_list,weight_of_each_clients):
