@@ -34,7 +34,7 @@ def set_averaged_weights_as_main_model_weights(center_model,clients_model_list,w
 def set_averaged_weights_as_main_model_weights_by_cos_similarity(center_model,clients_model_list,weight_of_each_clients):
     similarity_weight =[]
     for i in range(len(clients_model_list)):
-        similarity_weight.append(F.cosine_similarity(center_model.state_dict().values, clients_model_list[i].state_dict().values(), dim=1))
+        similarity_weight.append(F.cosine_similarity(center_model.parameters(), clients_model_list[i].parameters(), dim=1))
     print(similarity_weight)
     sum_parameters = None  # 用来接所有边缘节点的模型的参数
     global_parameters = {}
