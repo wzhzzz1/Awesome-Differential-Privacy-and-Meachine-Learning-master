@@ -200,6 +200,7 @@ if __name__ == "__main__":
     ptype = args.ptype
     usedp = args.usedp
     use_cos_similarity=args.use_client_selection_by_similarity
+    print(model_kind)
     fed_avg(train_data, test_data, number_of_clients, learning_rate, model_kind, momentum, numEpoch, iters, alpha, seed,
             q_for_batch_size, per, ptype, usedp, epsilon)
 
