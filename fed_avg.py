@@ -62,8 +62,10 @@ def fed_avg(train_data, test_data, number_of_clients, learning_rate, momentum, m
     # 初始化中心模型,本质上是用来接收客户端的模型并加权平均进行更新的一个变量
     if model_kind =='DNN':
         center_model = mnist_fully_connected(10)
+        print("ceshi11111")
     elif model_kind =='Resnet18':
         center_model = ResNet18()
+        print("ceshi22222")
     all_train_loss=[]
     # 各个客户端的model,optimizer,criterion的分配
 
