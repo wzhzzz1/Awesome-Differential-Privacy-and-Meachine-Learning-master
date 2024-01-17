@@ -49,7 +49,7 @@ def parse_arguments():
     return args
 
 
-def fed_avg(train_data, test_data, number_of_clients, learning_rate, momentum, model_kind, numEpoch, iters, alpha, seed, q, per,
+def fed_avg(train_data, test_data, number_of_clients, learning_rate, model_kind, momentum, numEpoch, iters, alpha, seed, q, per,
             ptype, usedp, epsilon):
     epoch_list = []
     acc_list = []
@@ -58,14 +58,12 @@ def fed_avg(train_data, test_data, number_of_clients, learning_rate, momentum, m
                                                                                                          number_of_clients,
                                                                                                          alpha, seed, q)
     # clients_data_list, weight_of_each_clients,batch_size_of_each_clients =pathological_split_noniid(train_data,number_of_clients,alpha,seed,q)
-    print(model_kind)
+
     # 初始化中心模型,本质上是用来接收客户端的模型并加权平均进行更新的一个变量
     if model_kind =='DNN':
         center_model = mnist_fully_connected(10)
-        print("ceshi11111")
     elif model_kind =='Resnet18':
         center_model = ResNet18()
-        print("ceshi22222")
     all_train_loss=[]
     # 各个客户端的model,optimizer,criterion的分配
 
@@ -200,8 +198,6 @@ if __name__ == "__main__":
     ptype = args.ptype
     usedp = args.usedp
     use_cos_similarity=args.use_client_selection_by_similarity
-    print(model_kind)
-    print(ptype)
     fed_avg(train_data, test_data, number_of_clients, learning_rate, model_kind, momentum, numEpoch, iters, alpha, seed,
             q_for_batch_size, per, ptype, usedp, epsilon)
 
