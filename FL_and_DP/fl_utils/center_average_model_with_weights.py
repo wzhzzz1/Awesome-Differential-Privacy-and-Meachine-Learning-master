@@ -71,6 +71,7 @@ def set_averaged_weights_as_main_model_weights_by_cos_similarity(center_model,cl
             for key, var in local_parameters.items():
                 if 'norm' not in key and 'bn' not in key and 'downsample.1' not in key:
                     temp_parameters[key] = var.clone().to(device)
+            print(temp_parameters.keys())
             client_paramaters_list.append(temp_parameters)
 
     for i in range(len(clients_model_list)):
