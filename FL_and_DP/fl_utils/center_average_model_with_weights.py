@@ -6,8 +6,8 @@ device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
 def cosine_similarity(dict_a, dict_b):
     # 提取字典的值作为向量
-    vector_a = np.array(list(dict_a.values()))
-    vector_b = np.array(list(dict_b.values()))
+    vector_a = np.array(list(dict_a.values())).cpu().numpy()
+    vector_b = np.array(list(dict_b.values())).cpu().numpy()
 
     # 计算余弦相似度
     dot_product = np.dot(vector_a, vector_b)
