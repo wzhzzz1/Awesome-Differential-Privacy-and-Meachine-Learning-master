@@ -13,7 +13,7 @@ bash fl.sh
 
 when --personal=0, this algorithm is fedavg
 
-when --personal=0 and --ptype='single', this algorithm is privatefl
+when --personal=1 and --ptype='single', this algorithm is privatefl
 
-when --personal=0 and --ptype='double', this algorithm is PD-LDPFL
+when --personal=1 and --ptype='double', this algorithm is PD-LDPFL
 
