@@ -1,6 +1,7 @@
 import torch
 import torch
 import torch.nn.functional as F
+import numpy as np
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
 def cosine_similarity(dict_a, dict_b):
