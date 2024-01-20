@@ -88,6 +88,13 @@ def fed_avg(train_data, test_data, number_of_clients, learning_rate, model_kind,
             elif model_kind == 'Resnet18':
                 clients_model_list, clients_optimizer_list, clients_criterion_list = create_model_optimizer_criterion_dict(
                     number_of_clients, learning_rate, ResNet18_IN1())
+        if ptype == 'Fedper':
+            if model_kind == 'DNN':
+                clients_model_list, clients_optimizer_list, clients_criterion_list = create_model_optimizer_criterion_dict(
+                    number_of_clients, learning_rate, mnist_fully_connected(10))
+            elif model_kind == 'Resnet18':
+                clients_model_list, clients_optimizer_list, clients_criterion_list = create_model_optimizer_criterion_dict(
+                    number_of_clients, learning_rate, ResNet18())
     test_dl = torch.utils.data.DataLoader(
         test_data, batch_size=256, shuffle=False)
 
@@ -206,9 +213,9 @@ if __name__ == "__main__":
     q_for_batch_size = args.sr  # 基于该数据采样率组建每个客户端的batchsize
     epsilon = args.eps
     model_kind = args.model
-    per = args.pd
-    ptype = args.pdtype
+    pd = args.pd
+    pdtype = args.pdtype
     usedp = args.usedp
     use_cos_similarity = args.use_client_selection_by_similarity
     fed_avg(train_data, test_data, number_of_clients, learning_rate, model_kind, momentum, numEpoch, iters, alpha, seed,
-            q_for_batch_size, per, ptype, usedp, epsilon, use_cos_similarity)
+            q_for_batch_size, pd, pdtype, usedp, epsilon, use_cos_similarity)
