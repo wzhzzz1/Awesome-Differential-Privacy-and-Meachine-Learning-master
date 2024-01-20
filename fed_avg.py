@@ -18,7 +18,7 @@ import matplotlib.pyplot as plt
 import argparse
 import pandas as pd
 import math
-
+from tqdm import tqdm
 
 def parse_arguments():
     parser = argparse.ArgumentParser()
@@ -95,7 +95,7 @@ def fed_avg(train_data, test_data, number_of_clients, learning_rate, model_kind,
     test_accuracy_record = []
     test_loss_record = []
 
-    for i in range(iters):
+    for i in tqdm(range(iters)):
 
         print("现在进行和中心方的第{:3.0f}轮联邦训练".format(i + 1))
 
