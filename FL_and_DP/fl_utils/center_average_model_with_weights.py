@@ -4,22 +4,6 @@ import torch.nn.functional as F
 import numpy as np
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
-def cosine_similarity(dict_a, dict_b):
-    # 提取字典的值作为向量
-    vector_a = np.array(list(dict_a.values()))
-    vector_b = np.array(list(dict_b.values()))
-
-    # 将PyTorch张量移动到主机内存并确保形状一致
-    vector_a = torch.tensor(vector_a).cpu().numpy().flatten()
-    vector_b = torch.tensor(vector_b).cpu().numpy().flatten()
-
-    # 计算余弦相似度
-    dot_product = np.dot(vector_a, vector_b)
-    norm_a = np.linalg.norm(vector_a)
-    norm_b = np.linalg.norm(vector_b)
-
-    similarity = dot_product / (norm_a * norm_b)
-    return similarity
 
 
 
@@ -75,9 +59,10 @@ def set_averaged_weights_as_main_model_weights_by_cos_similarity(center_model,cl
             client_paramaters_list.append(temp_parameters)
 
     for i in range(len(clients_model_list)):
-        cos_similarity_value.append(cosine_similarity(global_parameters, client_paramaters_list[i]))
-
-    print(cos_similarity_value)
+        vector_A = torch.cat([tensor.view(-1) for tensor in dict_A.values()])
+        vector_B = torch.cat([tensor.view(-1) for tensor in dict_B.values()])
+        cos_similarity_value.append(F.cosine_similarity(vector_A.unsqueeze(0), vector_B.unsqueeze(0)))
+      print(cos_similarity_value)
     center_model.load_state_dict(global_parameters, strict=True)
     return center_model
 
