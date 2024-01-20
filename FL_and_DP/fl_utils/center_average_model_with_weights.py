@@ -3,24 +3,17 @@ import torch
 import torch.nn.functional as F
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
-def cosine_similarity(dict1, dict2):
-    # 获取两个字典的键的并集
-    all_keys = set(dict1.keys()) | set(dict2.keys())
-
-    # 计算两个字典的向量表示
-    vector1 = [dict1.get(key, 0) for key in all_keys]
-    vector2 = [dict2.get(key, 0) for key in all_keys]
-
-    # 计算余弦相似度的分子
-    dot_product = sum(x * y for x, y in zip(vector1, vector2))
-
-    # 计算余弦相似度的分母
-    magnitude1 = sqrt(sum(x ** 2 for x in vector1))
-    magnitude2 = sqrt(sum(y ** 2 for y in vector2))
+def cosine_similarity(dict_a, dict_b):
+    # 提取字典的值作为向量
+    vector_a = np.array(list(dict_a.values()))
+    vector_b = np.array(list(dict_b.values()))
 
     # 计算余弦相似度
-    similarity = dot_product / (magnitude1 * magnitude2)
+    dot_product = np.dot(vector_a, vector_b)
+    norm_a = np.linalg.norm(vector_a)
+    norm_b = np.linalg.norm(vector_b)
 
+    similarity = dot_product / (norm_a * norm_b)
     return similarity
 
 
