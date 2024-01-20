@@ -183,7 +183,7 @@ def fed_avg(train_data, test_data, number_of_clients, learning_rate, model_kind,
     df.to_csv('./result/fedavg_result_' + 'iters' + str(iters) + '_appha' + str(alpha) + '_clients' + str(
         number_of_clients) + '_lr' + str(learning_rate) + '_personal' + str(per) + '_ptype_' + str(
         ptype) + '_usedp' + str(usedp) + '_eps' + str(epsilon) + '.csv', index=False)
-    print(all_train_loss)
+    #print(all_train_loss)
     # record=[iters,numEpoch,test_loss_record,test_accuracy_record]
 
     # torch.save(record, "../record/{}.pth".format(int(numEpoch)))
