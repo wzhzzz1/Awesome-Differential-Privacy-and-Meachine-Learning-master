@@ -9,9 +9,9 @@ def cosine_similarity(dict_a, dict_b):
     vector_a = np.array(list(dict_a.values()))
     vector_b = np.array(list(dict_b.values()))
 
-    # 将PyTorch张量移动到主机内存
-    vector_a = torch.tensor(vector_a).cpu().numpy()
-    vector_b = torch.tensor(vector_b).cpu().numpy()
+    # 将PyTorch张量移动到主机内存并确保形状一致
+    vector_a = torch.tensor(vector_a).cpu().numpy().flatten()
+    vector_b = torch.tensor(vector_b).cpu().numpy().flatten()
 
     # 计算余弦相似度
     dot_product = np.dot(vector_a, vector_b)
