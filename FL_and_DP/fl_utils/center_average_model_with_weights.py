@@ -59,8 +59,8 @@ def set_averaged_weights_as_main_model_weights_by_cos_similarity(center_model,cl
             client_paramaters_list.append(temp_parameters)
 
         for i in range(len(clients_model_list)):
-            vector_A = torch.cat([tensor.view(-1) for tensor in dict_A.values()])
-            vector_B = torch.cat([tensor.view(-1) for tensor in dict_B.values()])
+            vector_A = torch.cat([tensor.view(-1) for tensor in client_paramaters_list[i].values()])
+            vector_B = torch.cat([tensor.view(-1) for tensor in global_parameters.values()])
             cos_similarity_value.append(F.cosine_similarity(vector_A.unsqueeze(0), vector_B.unsqueeze(0)))
         print(cos_similarity_value)
     center_model.load_state_dict(global_parameters, strict=True)
