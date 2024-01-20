@@ -60,7 +60,7 @@ def set_averaged_weights_as_main_model_weights_by_cos_similarity(center_model,cl
 
     for key, var in center_model.state_dict().items():
         print(key)
-        print(type(var))
+        print(var.size())
         global_parameters[key] = var.clone()
 
     with torch.no_grad():
