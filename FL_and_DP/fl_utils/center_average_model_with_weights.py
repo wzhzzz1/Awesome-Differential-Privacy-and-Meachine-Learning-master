@@ -61,7 +61,7 @@ def set_averaged_weights_as_main_model_weights_by_cos_similarity(center_model,cl
     for key, var in center_model.state_dict().items():
         print(key)
         print(len(var))
-        global_parameters[key] = var.clone().to(device)
+        global_parameters[key] = var.clone()
 
     with torch.no_grad():
 
@@ -70,7 +70,7 @@ def set_averaged_weights_as_main_model_weights_by_cos_similarity(center_model,cl
             local_parameters = clients_model_list[i].state_dict()  # 先把第i个客户端的model取出来
             for key, var in local_parameters.items():
                 if 'norm' not in key and 'bn' not in key and 'downsample.1' not in key:
-                    temp_parameters[key] = var.clone().to(device)
+                    temp_parameters[key] = var.clone()
             print(temp_parameters.keys())
             client_paramaters_list.append(temp_parameters)
 
