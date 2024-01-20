@@ -39,10 +39,10 @@ def parse_arguments():
                         help='采样率')
     parser.add_argument('--eps', type=float, default=0,
                         help='隐私预算')
-    parser.add_argument('--personal', type=int, default=0,
-                        help='是否用个性化模型')
-    parser.add_argument('--ptype', type=str, default='no',
-                        help='是否用双个性化模型')
+    parser.add_argument('--pd', type=int, default=0,
+                        help='是否用参数解耦模型')
+    parser.add_argument('--pdtype', type=str, default='pd-ldpfl',
+                        help='参数解耦的算法名称')
     parser.add_argument('--usedp', type=int, default=0,
                         help='是否用dp')
     parser.add_argument('--use_client_selection_by_similarity', type=int, default=0,
@@ -74,14 +74,14 @@ def fed_avg(train_data, test_data, number_of_clients, learning_rate, model_kind,
             number_of_clients, learning_rate, center_model)
 
     else:
-        if ptype == 'single':
+        if ptype == 'privatefl':
             if model_kind == 'DNN':
                 clients_model_list, clients_optimizer_list, clients_criterion_list = create_model_optimizer_criterion_dict(
                     number_of_clients, learning_rate, mnist_fully_connected_IN(10))
             elif model_kind == 'Resnet18':
                 clients_model_list, clients_optimizer_list, clients_criterion_list = create_model_optimizer_criterion_dict(
                     number_of_clients, learning_rate, ResNet18_IN())
-        if ptype == 'double':
+        if ptype == 'pd-ldpfl':
             if model_kind == 'DNN':
                 clients_model_list, clients_optimizer_list, clients_criterion_list = create_model_optimizer_criterion_dict(
                     number_of_clients, learning_rate, mnist_fully_connected_IN1(10))
@@ -206,8 +206,8 @@ if __name__ == "__main__":
     q_for_batch_size = args.sr  # 基于该数据采样率组建每个客户端的batchsize
     epsilon = args.eps
     model_kind = args.model
-    per = args.personal
-    ptype = args.ptype
+    per = args.pd
+    ptype = args.pdtype
     usedp = args.usedp
     use_cos_similarity = args.use_client_selection_by_similarity
     fed_avg(train_data, test_data, number_of_clients, learning_rate, model_kind, momentum, numEpoch, iters, alpha, seed,
