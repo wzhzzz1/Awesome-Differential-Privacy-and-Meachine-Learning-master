@@ -47,7 +47,7 @@ def PM_adding_noise(model,epsilon): #这个地方可能最好调用以下ray来�
                 per_data_parameters_grad_dict[key] = torch.tensor(temp).to(device) * bound
 
         #问题出现在这个model.load_state_dict,我们看一下具体是什么问题
-        #model.load_state_dict(per_data_parameters_grad_dict, strict=True)
+        model.load_state_dict(per_data_parameters_grad_dict, strict=True)
     return model
 
 
