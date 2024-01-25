@@ -18,3 +18,6 @@ when --personal=1 and --ptype='privatefl', this algorithm is privatefl
 when --personal=1 and --ptype='pd-ldpfl', this algorithm is PD-LDPFL
 
 when --personal=1 and --ptype='fedper', this algorithm is Fedper
+
+Pending tasks：
+Adding fedproto
