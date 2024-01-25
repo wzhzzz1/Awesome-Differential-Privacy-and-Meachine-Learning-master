@@ -54,7 +54,7 @@ def parse_arguments():
 def fed_avg(train_data, test_data, number_of_clients, learning_rate, model_kind, momentum, numEpoch, iters, alpha, seed,
             q, per, ptype, usedp, epsilon, use_cos_similarity):
 
-    print(usedp,epsilon)
+
     epoch_list = []
     acc_list = []
     # 客户端的样本分配
