@@ -141,6 +141,7 @@ def local_clients_train_process_with_dp_one_batch(number_of_clients, clients_dat
 def local_clients_train_process_one_epoch_with_ldp_PM(number_of_clients, clients_data_list, clients_model_list,
                                                       clients_criterion_list, clients_optimizer_list, numEpoch, q,
                                                       epsilon):
+    print(epsilon)
     all_train_loss = []  # 为了输出训练集的损失，可以删除
     # 循环客户端
     for i in range(number_of_clients):
