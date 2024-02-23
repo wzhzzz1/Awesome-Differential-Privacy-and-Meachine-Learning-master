@@ -105,19 +105,19 @@ class mnist_fully_connected_IN2(nn.Module):
         self.relu = nn.ReLU(inplace=False)
         self.norm = InputNorm1(1, 28)
         self.bn = OutputNorm1(1, 10)
-        self.weight1 = nn.Parameter(torch.ones(1))
-        self.weight2 = nn.Parameter(torch.ones(1))
-        self.weight3 = nn.Parameter(torch.ones(1))
+        self.sigma1 = nn.Parameter(torch.ones(1))
+        self.sigma2 = nn.Parameter(torch.ones(1))
+        self.sigma3 = nn.Parameter(torch.ones(1))
 
     def forward(self, x):
         x = self.norm(x)
         x = x.view(-1, 28 * 28)  # 将输入变为28*28的一维向量
         x = relu(self.fc1(x))
-        x = self.weight1 * x
+        x = self.sigma1 * x
         x = relu(self.fc2(x))
-        x = self.weight2 * x
+        x = self.sigma2 * x
         x = self.fc3(x)
-        x = self.weight3 * x
+        x = self.sigma3 * x
         x = self.bn(x)
         return x
 

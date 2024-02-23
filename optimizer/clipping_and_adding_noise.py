@@ -15,7 +15,7 @@ def PM_adding_noise(model,epsilon): #这个地方可能最好调用以下ray来�
 
         for key in per_data_parameters_grad_dict:
 
-            if 'norm' not in key and 'bn' not in key and 'weight' not in key and 'downsample.1' not in key:  # 这个downsample是resnet里特有的，norm就是个性化层
+            if 'norm' not in key and 'bn' not in key and 'sigma' not in key and 'downsample.1' not in key:  # 这个downsample是resnet里特有的，norm就是个性化层
 
                 max_value = torch.max(per_data_parameters_grad_dict[key])
                 min_value = torch.min(per_data_parameters_grad_dict[key])
