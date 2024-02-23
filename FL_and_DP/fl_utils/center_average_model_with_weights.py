@@ -11,6 +11,7 @@ def set_averaged_weights_as_main_model_weights(center_model,clients_model_list,w
     sum_parameters = None  # 用来接所有边缘节点的模型的参数
     global_parameters = {}
     for key, var in center_model.state_dict().items():
+        print('global',key)
         global_parameters[key] = var.clone()
 
     with torch.no_grad():
@@ -23,6 +24,7 @@ def set_averaged_weights_as_main_model_weights(center_model,clients_model_list,w
                 sum_parameters = {}
                 for key, var in local_parameters.items():
                     if 'norm' not in key and 'bn' not in key and 'weight' not in key and 'downsample.1' not in key:
+                        print(key)
                         sum_parameters[key] = weight_of_each_clients[i] * var.clone()
 
             else:  # 然后做值的累加,这边直接加权了
