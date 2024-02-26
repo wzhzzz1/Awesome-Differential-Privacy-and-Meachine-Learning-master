@@ -113,7 +113,7 @@ def fed_avg(train_data, test_data, number_of_clients, learning_rate, model_kind,
 
     for i in tqdm(range(iters)):
 
-        print("现在进行和中心方的第{:3.0f}轮联邦训练".format(i + 1))
+        print("现在进行和中心方的第{}轮联邦训练".format(i + 1))
 
         if usedp == 0:
             train_loss = local_clients_train_process_without_dp_one_epoch(number_of_clients, clients_data_list,
