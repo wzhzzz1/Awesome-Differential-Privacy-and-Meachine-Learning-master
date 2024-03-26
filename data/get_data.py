@@ -67,7 +67,7 @@ def get_data(name, augment=False, **kwargs):
                                           transform=transform,
                                           download=True)
 
-        test_set = datasets.EMNIST(root='../data', split='byclass',train=False,
+        test_set = datasets.EMNIST(root='../data', split='letters',train=False,
                                          transform=transform,
                                          download=True)
     elif name == "mnist":

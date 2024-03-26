@@ -130,8 +130,13 @@ def fed_avg(train_data, test_data, number_of_clients, learning_rate, model_kind,
                                                                            q, epsilon)
             all_train_loss.append(train_loss)
         if use_cos_similarity == 0:
-            main_model = set_averaged_weights_as_main_model_weights(center_model, clients_model_list,
-                                                                weight_of_each_clients)
+
+            if ptype == 'Fedper':
+                main_model = Fedper_set_averaged_weights_as_main_model_weights(center_model, clients_model_list,
+                                                                        weight_of_each_clients)
+            else:
+                main_model = set_averaged_weights_as_main_model_weights(center_model, clients_model_list,
+                                                                        weight_of_each_clients)
         else:
             main_model = set_averaged_weights_as_main_model_weights_by_cos_similarity(center_model, clients_model_list,
                                                                     weight_of_each_clients)
