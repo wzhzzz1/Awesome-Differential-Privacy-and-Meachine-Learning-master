@@ -72,32 +72,31 @@ def get_data(name, augment=False, **kwargs):
                                   transform=transform,
                                   download=True)
 
-    elif name == "cifar10_500K":
-
-        # extended version of CIFAR-10 with pseudo-labelled tinyimages
-
+    elif name == "cifar10":
         normalize = transforms.Normalize(mean=[0.485, 0.456, 0.406],
                                          std=[0.229, 0.224, 0.225])
 
         if augment:
             train_transforms = [
-                transforms.RandomHorizontalFlip(),
-                transforms.RandomCrop(32, 4),
-                transforms.ToTensor(),
-                normalize,
-            ]
+                    transforms.RandomHorizontalFlip(),
+                    transforms.RandomCrop(32, 4),
+                    transforms.ToTensor(),
+                    normalize,
+                ]
         else:
             train_transforms = [
                 transforms.ToTensor(),
                 normalize,
             ]
 
-        train_set = SemiSupervisedDataset(kwargs['aux_data_filename'],
-                                          root="../data",
-                                          train=True,
-                                          download=True,
-                                          transform=transforms.Compose(train_transforms))
-        test_set = None
+        train_set = datasets.CIFAR10(root="../data", train=True,
+                                     transform=transforms.Compose(train_transforms),
+                                     download=True)
+
+        test_set = datasets.CIFAR10(root="../data", train=False,
+                                    transform=transforms.Compose(
+                                        [transforms.ToTensor(), normalize]
+                                    ))
     else:
         raise ValueError(f"unknown dataset {name}")
 
