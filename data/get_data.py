@@ -63,11 +63,11 @@ def get_data(name, augment=False, **kwargs):
             # transforms.Normalize((0.1307,), (0.3081,))
         ])
         transform = transforms.ToTensor()
-        train_set = datasets.EMNIST(root='../data', train=True,
+        train_set = datasets.EMNIST(root='../data', split='letters',train=True,
                                           transform=transform,
                                           download=True)
 
-        test_set = datasets.EMNIST(root='../data', train=False,
+        test_set = datasets.EMNIST(root='../data', split='letters',train=False,
                                          transform=transform,
                                          download=True)
     elif name == "mnist":
@@ -85,7 +85,7 @@ def get_data(name, augment=False, **kwargs):
                                   transform=transform,
                                   download=True)
 
-    elif name == "cifar10":
+    elif name == "cifar100":
         normalize = transforms.Normalize(mean=[0.485, 0.456, 0.406],
                                          std=[0.229, 0.224, 0.225])
 
@@ -102,11 +102,11 @@ def get_data(name, augment=False, **kwargs):
                 normalize,
             ]
 
-        train_set = datasets.CIFAR10(root="../data", train=True,
+        train_set = datasets.CIFAR100(root="../data", train=True,
                                      transform=transforms.Compose(train_transforms),
                                      download=True)
 
-        test_set = datasets.CIFAR10(root="../data", train=False,
+        test_set = datasets.CIFAR100(root="../data", train=False,
                                     transform=transforms.Compose(
                                         [transforms.ToTensor(), normalize]
                                     ))
