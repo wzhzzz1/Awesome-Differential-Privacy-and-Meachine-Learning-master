@@ -56,7 +56,20 @@ def get_data(name, augment=False, **kwargs):
         test_set = datasets.FashionMNIST(root='../data', train=False,
                                          transform=transform,
                                          download=True)
+    elif name == "emnist":
+        transform = transforms.Compose([
+            transforms.Resize((64, 64)),
+            transforms.ToTensor(),
+            # transforms.Normalize((0.1307,), (0.3081,))
+        ])
+        transform = transforms.ToTensor()
+        train_set = datasets.EMNIST(root='../data', train=True,
+                                          transform=transform,
+                                          download=True)
 
+        test_set = datasets.EMNIST(root='../data', train=False,
+                                         transform=transform,
+                                         download=True)
     elif name == "mnist":
         transform = transforms.Compose([
             transforms.Resize((64, 64)),
