@@ -104,6 +104,13 @@ def fed_avg(train_data, test_data, number_of_clients, learning_rate, model_kind,
             elif model_kind == 'Resnet18':
                 clients_model_list, clients_optimizer_list, clients_criterion_list = create_model_optimizer_criterion_dict(
                     number_of_clients, learning_rate, ResNet18())
+        if ptype == 'Fedproto':
+            if model_kind == 'DNN':
+                clients_model_list, clients_optimizer_list, clients_criterion_list = create_model_optimizer_criterion_dict(
+                    number_of_clients, learning_rate, mnist_fully_connected(10))
+            elif model_kind == 'Resnet18':
+                clients_model_list, clients_optimizer_list, clients_criterion_list = create_model_optimizer_criterion_dict(
+                    number_of_clients, learning_rate, ResNet18())
     test_dl = torch.utils.data.DataLoader(
         test_data, batch_size=256, shuffle=False)
 
